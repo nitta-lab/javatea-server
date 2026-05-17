@@ -17,8 +17,6 @@ public class TimetableRepository {
         if(!timetableMap.containsKey(uid)){
             timetableMap.put(uid,new HashMap<>());
             timetableMap.get(uid).put(curYear,new Timetable(uid, curYear));
-        }else{
-            throw new RuntimeException("指定された" + uid + "が存在しません");
         }
     }
 
