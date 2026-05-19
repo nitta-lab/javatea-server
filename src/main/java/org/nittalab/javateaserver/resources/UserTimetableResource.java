@@ -45,6 +45,8 @@ public class UserTimetableResource {
 //                            .build()
 //            );
 //        }
+//        // 年度取得
+//        List years = timetableRepository.getYears(uid);
         return Response.ok().build();
     }
 
@@ -52,7 +54,16 @@ public class UserTimetableResource {
     @GET
     @Path("/{uid}/timetable/{year}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLectuers(@PathParam("uid") String uid, @PathParam("year") String year, @QueryParam("token") String token) {
+    public Response getLectures(@PathParam("uid") String uid, @PathParam("year") String year, @QueryParam("token") String token) {
+//        List lectures = timetableRepository.getLectureIds(uid, year);
+//        // 年度の存在確認
+//        if(year == null || lectures == null){
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.FORBIDDEN)
+//                            .entity("404 年度が存在しません")
+//                            .build()
+//            );
+//        }
         return Response.ok().build();
     }
 
@@ -62,6 +73,8 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response putYear(@PathParam("uid") String uid, @PathParam("year") String year, @FormParam("token") String token) {
+//        // 年度追加
+//        timetableRepository.createTimetable(uid, year);
         return Response.ok().build();
     }
 
@@ -71,6 +84,22 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response putLecture(@PathParam("uid") String uid, @PathParam("year") String year,@PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+        // 授業の存在確認
+//        if(lectureId == null || lectureRepository.getLecture(lectureId)){
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.FORBIDDEN)
+//                            .entity("404 授業が存在しません")
+//                            .build()
+//            );
+//        }
+//        // 授業ID追加
+//        if(!timetableRepository.addLectureId(uid, year, lectureId)){
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.FORBIDDEN)
+//                            .entity("404 年度が存在しません")
+//                            .build()
+//            );
+//        }
         return Response.ok().build();
     }
 
@@ -80,6 +109,14 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response putYear(@PathParam("uid") String uid, @PathParam("year") String year,@PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+        // 授業IDの削除
+//        if(!timetableRepository.deleteLectureId(uid, year, lectureId)){
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.FORBIDDEN)
+//                            .entity("404 年度が存在しません")
+//                            .build()
+//            );
+//        }
         return Response.ok().build();
     }
 }
