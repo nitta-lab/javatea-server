@@ -22,7 +22,7 @@ public class Timetable {
         return new ArrayList<>(lectureIds);
     }
 
-    public void setLectureId(String lectureId) {
+    public void addLectureId(String lectureId) {
         lectureIds.add(lectureId);
     }
 

@@ -3,67 +3,67 @@ package org.nittalab.javateaserver.repositories;
 import org.nittalab.javateaserver.models.Timetable;
 import org.springframework.stereotype.Repository;
 import java.util.*;
-import java.time.LocalDate;
 
 @Repository
 public class TimetableRepository {
     //タイムテーブル情報を保存するHashMap
     private HashMap<String,TreeMap<Integer,Timetable>> timetableMap = new HashMap<>();
-    //private static final int curYear = LocalDate.now().getYear();
 
-    //ユーザのタイムテーブルを作成
+    //ユーザのタイムテーブルを作成してTimetable
     //ユーザが存在するかどうかはuserRepositoryに丸投げ予定
-    private void setTimetableMap(String uid){
+    private Timetable getTimetableMap(String uid,int year){
         if(!timetableMap.containsKey(uid)){
             timetableMap.put(uid,new TreeMap<>());
-            int curYear = LocalDate.now().getYear();
-            timetableMap.get(uid).put(curYear,new Timetable(uid, curYear));
+        }
+        if(!timetableMap.get(uid).containsKey(year)){
+            return null;
+        }
+        return timetableMap.get(uid).get(year);
+    }
+
+    //ユーザが時間割登録をした年度を追加して、その年度のtimetableを作成
+    public void createTimetable(String uid,int year){
+        if(!timetableMap.get(uid).containsKey(year)){
+            timetableMap.get(uid).put(year,new Timetable(uid,year));
         }
     }
 
     //ユーザが時間割登録をした年度一覧を取得する
     public ArrayList<Integer> getYears(String uid){
-        setTimetableMap(uid);
         return new ArrayList<>(timetableMap.get(uid).keySet());
     }
 
     //ユーザが時間割登録をした年度に登録した授業すべてを取得する
+    //年度が存在しなければnullを返す
     public ArrayList<String> getLectureIds(String uid,int year){
-        setTimetableMap(uid);
-        //年度が存在しないときはnullを返す
-        if(!timetableMap.get(uid).containsKey(year)){
+        Timetable timetable = getTimetableMap(uid,year);
+        if(timetable ==  null){
             return null;
         }
-        return timetableMap.get(uid).get(year).getLectureIds();
-    }
-
-    //ユーザが時間割登録をした年度を追加して、その年度のtimetableを作成
-    public void addYear(String uid,int year){
-        setTimetableMap(uid);
-        timetableMap.get(uid).put(year,new Timetable(uid,year));
+        return timetable.getLectureIds();
     }
 
     //時間割に授業を追加
+    //追加に成功したらtrue
+    //年度が存在しなければ false
     public boolean addLectureId(String uid,int year,String lectureId){
-        setTimetableMap(uid);
-        //yearが無い時の処理(追加失敗)
-        if(!timetableMap.get(uid).containsKey(year)){
+        Timetable timetable = getTimetableMap(uid,year);
+        if(timetable == null){
             return false;
         }
-        timetableMap.get(uid).get(year).setLectureId(lectureId);
-        //追加に成功
+        timetable.addLectureId(lectureId);
         return true;
     }
 
     //時間割の授業を削除
+    //削除に成功したらtrue
+    //年度が存在しなければfalse
     public boolean deleteLectureId(String uid,int year,String lectureId){
-        setTimetableMap(uid);
-        //yearが無い時の処理(削除失敗)
-        if(!timetableMap.get(uid).containsKey(year)){
+        Timetable timetable = getTimetableMap(uid,year);
+        if(timetable == null){
             return false;
         }
-        timetableMap.get(uid).get(year).deleteLectureId(lectureId);
-        //削除に成功
+        timetable.deleteLectureId(lectureId);
         return true;
     }
 }
