@@ -5,20 +5,20 @@ public class Timetable {
     private int year;
     private Set<String> lectureIds = new HashSet<>();
 
-    public Timetable(String uid,int year){
+    public Timetable(String uid, int year) {
         this.uid = uid;
         this.year = year;
     }
 
-    public int getYear(){
+    public int getYear() {
         return year;
     }
 
-    public String getUid(){
+    public String getUid() {
         return uid;
     }
 
-    public ArrayList<String> getLectureIds(){
+    public ArrayList<String> getLectureIds() {
         return new ArrayList<>(lectureIds);
     }
 
@@ -26,7 +26,7 @@ public class Timetable {
         lectureIds.add(lectureId);
     }
 
-    public void deleteLectureId(String lectureId){
+    public void deleteLectureId(String lectureId) {
         lectureIds.remove(lectureId);
     }
 }
