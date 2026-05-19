@@ -1,18 +1,18 @@
 package org.nittalab.javateaserver.resources;
 
-//import javax.ws.rs.*;
-//import javax.ws.rs.core.MediaType;
-//import javax.ws.rs.core.Response;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 //import org.nittalab.javateaserver.models.FriendPair;
 //import org.nittalab.javateaserver.models.UserDTO;
-//import org.nittalab.javateaserver.repositories.UserRepository;
-//import org.nittalab.javateaserver.models.User;
-////import org.nittalab.javateaserver.services.FriendService;
-////import org.nittalab.javateaserver.utils.Base64Decode;
+import org.nittalab.javateaserver.repositories.UserRepository;
+import org.nittalab.javateaserver.models.User;
+//import org.nittalab.javateaserver.services.FriendService;
+//import org.nittalab.javateaserver.utils.Base64Decode;
 //import org.springframework.beans.BeansException;
-//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.ApplicationContextAware;
-//import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
 //import java.io.File;
 //import java.io.IOException;
@@ -21,7 +21,8 @@ package org.nittalab.javateaserver.resources;
 //import java.util.List;
 
 //import static io.micrometer.common.util.StringUtils.isBlank;
-//import static org.apache.logging.log4j.util.Strings.isBlank;
+import static org.apache.logging.log4j.util.Strings.isBlank;
+
 /*
 //6/10報告:全部できた(friendまで)、UserRepositoryとの連携ができていない(updateあります？)、responseがない
 //6/17報告：すべてのユーザーの情報を持ってくるところ、フレンドペアの自分じゃない方のuidを返すところ、フレンドペアの削除はもらったものを連携できていない
@@ -44,100 +45,102 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 1.
 */
 
-//@Path("/users")
-//@Component
+@Path("/users")
+@Component
+public class UserResource {
+
+// 先輩のものにあったので一応載せています
 //public class UserResource implements ApplicationContextAware {
 //    private org.springframework.context.ApplicationContext applicationContext;
-//
-//
-//
+
 //    public void setApplicationContext(org.springframework.context.ApplicationContext applicationContext) throws BeansException {
 //        this.applicationContext = applicationContext;
 //    }
-//
-//
-//    private final UserRepository userRepository;
-//
-//    @Autowired
-//    public UserResource(UserRepository userRepository) { //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
-//        this.userRepository = userRepository;
+
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserResource(UserRepository userRepository) { //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
+        this.userRepository = userRepository;
+    }
+
+    //@Path("/{uid}/..")などパスを指定する
+
+
+//    //アカウントの基本情報　ここもGETすることないから多分いらない
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    /*関数の名前を適切なものに変更する
+//    関数の引数に@PathParam("uid") String uidのような形でパラメーターを定義しておく
+//    Queryの場合は@QueryParam("filter") String filter
+//    repositoryのメソッド名：add, get, delete
+//    本来の流れはインターフェースだけ決めておく　メソッド名と引数名*/
+//    public Response getUsers() {
+//        List<String> users = userRepository.getAllUsers();
+//        if (users.isEmpty()) {
+//            return Response.noContent().build();
+//        }
+//        return Response.ok(users).build();
 //    }
-//
-//    //@Path("/{uid}/..")などパスを指定する
-//
-//
-////    //アカウントの基本情報　ここもGETすることないから多分いらない
-////    @GET
-////    @Produces(MediaType.APPLICATION_JSON)
-////    /*関数の名前を適切なものに変更する
-////    関数の引数に@PathParam("uid") String uidのような形でパラメーターを定義しておく
-////    Queryの場合は@QueryParam("filter") String filter
-////    repositoryのメソッド名：add, get, delete
-////    本来の流れはインターフェースだけ決めておく　メソッド名と引数名*/
-////    public Response getUsers() {
-////        List<String> users = userRepository.getAllUsers();
-////        if (users.isEmpty()) {
-////            return Response.noContent().build();
-////        }
-////        return Response.ok(users).build();
-////    }
-//
-//
-////    //新規アカウントを作る
-////    @POST
-////    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-////    public Response createUser(@FormParam("uid") String userId, @FormParam("password") String password) {
-////
-////        if (isBlank(userId) || isBlank(password)) {
-////            throw new WebApplicationException(
-////                    Response.status(Response.Status.BAD_REQUEST)
-////                            .entity("ユーザーIDおよびパスワードを入力してください")
-////                            .build());
-////        }
-////
-////
-////        //ユーザーIDが存在しているか調べる
-////        ArrayList userIdList = new ArrayList();
-////        userIdList.add(userRepository.getAllUsers());
-////        for (int i = 0; i < userIdList.size(); i++) {
-////            if(userId.equals(userIdList.get(i).toString())) {
-////                throw new WebApplicationException(Response.Status.CONFLICT);
-////            }
-////        }
-////
-////        User existingUser = userRepository.getUser(userId);
-////        if (existingUser != null) {
-////            return Response.status(Response.Status.CONFLICT)
-////                    .entity("ユーザーIDが重複しています")
-////                    .build();
-////        }
-////
-////        User newUser = userRepository.addUser(userId, password);
-////
-////        //6/12ここはswaggerではなくコードを仕様にすると決定しました。
-////        //return Response.ok(user.login(), MediaType.APPLICATION_JSON).build();
-////        return Response.status(Response.Status.CREATED)
-////                .entity(newUser)   // 仮に JSON を返したい場合
-////                .build();
-////
-////    }
-////
-//
-//    //新規アカウントを登録、フォームパラメータ関係まだやってない
-//    @PUT
-//    @Path("/{uid}")
+
+
+//    //新規アカウントを作る
+//    @POST
 //    @Produces(MediaType.APPLICATION_JSON)
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    public Response updateUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
+//    public Response createUser(@FormParam("uid") String userId, @FormParam("password") String password) {
 //
-//        if (isBlank(uid) || isBlank(name) || isBlank(pw)) {
+//        if (isBlank(userId) || isBlank(password)) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.BAD_REQUEST)
-//                            .entity("ユーザーID,ニックネームおよびパスワードを入力してください")
+//                            .entity("ユーザーIDおよびパスワードを入力してください")
 //                            .build());
 //        }
 //
+//
+//        //ユーザーIDが存在しているか調べる
+//        ArrayList userIdList = new ArrayList();
+//        userIdList.add(userRepository.getAllUsers());
+//        for (int i = 0; i < userIdList.size(); i++) {
+//            if(userId.equals(userIdList.get(i).toString())) {
+//                throw new WebApplicationException(Response.Status.CONFLICT);
+//            }
+//        }
+//
+//        User existingUser = userRepository.getUser(userId);
+//        if (existingUser != null) {
+//            return Response.status(Response.Status.CONFLICT)
+//                    .entity("ユーザーIDが重複しています")
+//                    .build();
+//        }
+//
+//        User newUser = userRepository.addUser(userId, password);
+//
+//        //6/12ここはswaggerではなくコードを仕様にすると決定しました。
+//        //return Response.ok(user.login(), MediaType.APPLICATION_JSON).build();
+//        return Response.status(Response.Status.CREATED)
+//                .entity(newUser)   // 仮に JSON を返したい場合
+//                .build();
+//
+//    }
+//
+
+    //新規アカウントを登録、フォームパラメータ関係まだやってない
+    @PUT
+    @Path("/{uid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
+
+        // 400 リクエスト方式が不正
+        if (isBlank(uid) || isBlank(name) || isBlank(pw)) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("ユーザーID,ニックネームおよびパスワードを入力してください")
+                            .build());
+        }
+
 //        // ユーザーIDが存在しているか調べる
 //        ArrayList uidList = new ArrayList();
 //        uidList.add(userRepository.getAllUsers());
@@ -146,77 +149,22 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //                throw new WebApplicationException(Response.Status.CONFLICT);
 //            }
 //        }
-//
-//        User existingUser = userRepository.getUser(uid);
-//        if (existingUser != null) {
-//            return Response.status(Response.Status.CONFLICT)
-//                    .entity("ユーザーIDが重複しています")
-//                    .build();
-//        }
-//
-//        // addUserでuserを足してあげる
+
+        User existingUser = userRepository.getUser(uid);
+        // 409 ユーザIDの重複
+        if (existingUser != null) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("ユーザIDが重複しています")
+                    .build();
+        }
+
+//        // 200 正常にユーザID追加 今はaddUserない
 //        User newUser = userRepository.addUser(uid, pw);
-//
-////        //6/12ここはswaggerではなくコードを仕様にすると決定しました。
-////        //return Response.ok(user.login(), MediaType.APPLICATION_JSON).build();
-////        return Response.status(Response.Status.CREATED)
-////                .entity(newUser)   // 仮に JSON を返したい場合
-////                .build();
-//
-//
-//
-////        //取得
-////        User user = userRepository.getUser(uid);
-////        //存在の確認
-////        if (user == null) {
-////            throw new WebApplicationException(
-////                    Response.status(Response.Status.NOT_FOUND)
-////                            .entity("ユーザーが存在しません")
-////                            .build()
-////            );
-////        }
-//
-////        User existingUser = userRepository.getUser(uid);
-////        if (existingUser != null) {
-////            return Response.status(Response.Status.CONFLICT)
-////                    .entity("ユーザーIDが重複しています")
-////                    .build();
-////        }
-//
-//        return Response.ok().build();
-//    }
-//
-////    //ユーザの削除 今回は考えない
-////    @DELETE
-////    //deleteはquery parameter
-////    @Path("/{user-id}")
-////    @Produces(MediaType.APPLICATION_JSON)
-////    public Response deleteUser(@PathParam("user-id") String userId, @QueryParam("token") String token) {
-////        //取得
-////        User user = userRepository.getUser(userId);
-////        //存在チェック
-////        if (user == null) {
-////            throw new WebApplicationException(
-////                    Response.status(Response.Status.NOT_FOUND)
-////                            .entity("404 IDが存在しません")
-////                            .build()
-////            );
-////        }
-////
-////        if (!token.equals(user.getToken())) {
-////            throw new WebApplicationException(
-////                    Response.status(Response.Status.FORBIDDEN)
-////                            .entity("401 認証失敗")
-////                            .build()
-////            );
-////        }
-////
-////        //削除処理
-////        userRepository.deleteUser(userId);
-////        return Response.noContent().build();
-////    }
-//
-//
+        return Response.ok().build();
+    }
+}
+
+
 //    //ログイン
 //    @POST
 //    @Path("/{uid}/login")
@@ -240,7 +188,7 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        }
 //
 //        //存在チェック
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        if (user == null) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.NOT_FOUND)
@@ -264,14 +212,15 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        return Response.ok(token).build();
 //
 //    }
-//
+
+
 //    //ユーザの大学の取得
 //    @GET
 //    @Path("/{uid}/university")
 //    @Produces(MediaType.TEXT_PLAIN)
 //    public Response getUniversity(@PathParam("uid") String uid, @FormParam("token") String token) {
 //        //取得
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        //存在チェック
 //        if (user == null) {
 //            throw new WebApplicationException(
@@ -298,7 +247,7 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 //    public Response updateUniversity(@PathParam("uid") String uid, @FormParam("university") String university, @FormParam("token") String token) {
 //
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        if (user == null) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.NOT_FOUND)
@@ -320,14 +269,15 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        return Response.ok().build();
 //
 //    }
-//
+
+
 //    //ユーザの学部の取得
 //    @GET
 //    @Path("/{uid}/faculty")
 //    @Produces(MediaType.TEXT_PLAIN)
 //    public Response getFaculty(@PathParam("uid") String uid, @FormParam("token") String token) {
 //        //取得
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        //存在チェック
 //        if (user == null) {
 //            throw new WebApplicationException(
@@ -347,14 +297,15 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //
 //
 //    }
-//
+
+
 //    //ユーザの学部の登録
 //    @PUT
 //    @Path("/{uid}/faculty")
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 //    public Response updateFaculty(@PathParam("uid") String uid, @FormParam("faculty") String faculty, @FormParam("token") String token) {
 //
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        if (user == null) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.NOT_FOUND)
@@ -374,14 +325,15 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        user.setFaculty(faculty);
 //        return Response.ok().build();
 //    }
-//
+
+
 //    //ユーザの学科の取得
 //    @GET
 //    @Path("/{uid}/department")
 //    @Produces(MediaType.TEXT_PLAIN)
 //    public Response getDepartment(@PathParam("uid") String uid, @FormParam("token") String token) {
 //        //取得
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        //存在チェック
 //        if (user == null) {
 //            throw new WebApplicationException(
@@ -408,7 +360,7 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 //    public Response updateDepartment(@PathParam("uid") String uid, @FormParam("department") String department, @FormParam("token") String token) {
 //
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        if (user == null) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.NOT_FOUND)
@@ -428,14 +380,15 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        user.setDepartment(department);
 //        return Response.ok().build();
 //    }
-//
+
+
 //    //ユーザの学年の取得
 //    @GET
 //    @Path("/{uid}/grade")
 //    @Produces(MediaType.TEXT_PLAIN)
 //    public Response getGrade(@PathParam("uid") String uid, @FormParam("token") String token) {
 //        //取得
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        //存在チェック
 //        if (user == null) {
 //            throw new WebApplicationException(
@@ -462,7 +415,7 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 //    public Response updateGrade(@PathParam("uid") String uid, @FormParam("grade") String grade, @FormParam("token") String token) {
 //
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        if (user == null) {
 //            throw new WebApplicationException(
 //                    Response.status(Response.Status.NOT_FOUND)
@@ -482,14 +435,16 @@ Repository側の説明　Repositoryをつけるとspring bootがインスタン�
 //        user.setGrade(grade);
 //        return Response.ok().build();
 //    }
-//
+
+
+
 //    //アカウントのニックネームの取得 ok
 //    @GET
 //    @Path("/{uid}/name")
 //    @Produces(MediaType.TEXT_PLAIN)
 //    public Response getName(@PathParam("uid") String uid, @FormParam("token") String token) {
 //        //取得
-//        User user = userRepository.getUser(uid);
+//        User user = UserRepository.getUser(uid);
 //        //存在チェック
 //        if (user == null) {
 //            throw new WebApplicationException(
