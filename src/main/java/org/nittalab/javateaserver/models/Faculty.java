@@ -9,7 +9,13 @@ public class Faculty {
         this.departments.put(department_name, new Department());
     }
 
-    public String getDepartment(String department_name){
-        return this.departments.get(department_name).department_name;
+    public Department getDepartment(String department_name){
+        Department dep = this.departments.get(department_name);
+
+        if (dep == null){
+            throw new IllegalArgumentException(department_name + "not found");
+        }
+
+        return dep;
     }
 }
