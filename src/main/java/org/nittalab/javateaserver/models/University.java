@@ -10,4 +10,5 @@ public class University {
     public Faculty getFaculty(String faculty_name){
         return null;
     }
+
 }
