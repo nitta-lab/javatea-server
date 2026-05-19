@@ -19,6 +19,12 @@ public class Department {
     }
 
     public Lecture getLecture(String lectureId) {
-        return lecturesInDepartment.get(lectureId);
+        Lecture lec = this.lecturesInDepartment.get(lectureId);
+
+        if (lec == null){
+            throw new IllegalArgumentException("Lecture not found: " + lectureId);
+        }
+
+        return lec;
     }
 }
