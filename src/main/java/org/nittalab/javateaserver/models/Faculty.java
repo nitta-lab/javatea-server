@@ -23,8 +23,8 @@ public class Faculty {
     public Department getDepartment(String department_name){
         Department dep = this.departments.get(department_name);
 
-        if (dep == null){
-            throw new IllegalArgumentException(department_name + "not found");
+        if (!departments.containsKey(department_name)){
+            return null;
         }
 
         return dep;
@@ -37,8 +37,8 @@ public class Faculty {
     public Lecture getLecture(String lectureId) {
         Lecture lec = this.lecturesInFaculty.get(lectureId);
 
-        if (lec == null){
-            throw new IllegalArgumentException("Lecture not found: " + lectureId);
+        if (!lecturesInFaculty.containsKey(lectureId)){
+            return null;
         }
 
         return lec;

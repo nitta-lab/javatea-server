@@ -21,8 +21,8 @@ public class Department {
     public Lecture getLecture(String lectureId) {
         Lecture lec = this.lecturesInDepartment.get(lectureId);
 
-        if (lec == null){
-            throw new IllegalArgumentException("Lecture not found: " + lectureId);
+        if (!lecturesInDepartment.containsKey(lectureId)){
+            return null;
         }
 
         return lec;
