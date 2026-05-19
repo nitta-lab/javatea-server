@@ -1,5 +1,6 @@
 package org.nittalab.javateaserver.models;
 
+import org.nittalab.javateaserver.models.Faculty;
 
 public class University {
     public Faculty createFaculty(String faculty_name){
