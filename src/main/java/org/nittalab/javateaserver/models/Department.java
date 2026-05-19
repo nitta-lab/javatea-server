@@ -19,12 +19,10 @@ public class Department {
     }
 
     public Lecture getLecture(String lectureId) {
-        Lecture lec = this.lecturesInDepartment.get(lectureId);
-
         if (!lecturesInDepartment.containsKey(lectureId)){
             return null;
         }
 
-        return lec;
+        return this.lecturesInDepartment.get(lectureId);
     }
 }

@@ -21,13 +21,11 @@ public class Faculty {
     }
 
     public Department getDepartment(String department_name){
-        Department dep = this.departments.get(department_name);
-
         if (!departments.containsKey(department_name)){
             return null;
         }
 
-        return dep;
+        return this.departments.get(department_name);
     }
 
     public void addLecture(String lectureId, Lecture lecture) {
@@ -35,12 +33,10 @@ public class Faculty {
     }
 
     public Lecture getLecture(String lectureId) {
-        Lecture lec = this.lecturesInFaculty.get(lectureId);
-
         if (!lecturesInFaculty.containsKey(lectureId)){
             return null;
         }
 
-        return lec;
+        return this.lecturesInFaculty.get(lectureId);
     }
 }
