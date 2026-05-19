@@ -1,5 +1,5 @@
 package org.nittalab.javateaserver.repositories;
-
+//完成
 import org.nittalab.javateaserver.models.University;
 import org.springframework.stereotype.Repository;
 import java.util.*;
