@@ -32,11 +32,7 @@ public class Faculty {
         lecturesInFaculty.put(lectureId, lecture);
     }
 
-    public Lecture getLecture(String lectureId) {
-        if (!lecturesInFaculty.containsKey(lectureId)){
-            return null;
-        }
-
-        return this.lecturesInFaculty.get(lectureId);
+    public HashMap<String, Lecture> getLectures() {
+        return lecturesInFaculty;
     }
 }

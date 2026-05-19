@@ -18,11 +18,7 @@ public class Department {
         lecturesInDepartment.put(lectureId, lecture);
     }
 
-    public Lecture getLecture(String lectureId) {
-        if (!lecturesInDepartment.containsKey(lectureId)){
-            return null;
-        }
-
-        return this.lecturesInDepartment.get(lectureId);
+    public HashMap<String, Lecture> getLectures() {
+        return lecturesInDepartment;
     }
 }
