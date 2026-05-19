@@ -39,7 +39,6 @@ public class Lecture {
         return semester;
     }
 
-
     public void setSemester(String semester) {
         this.semester = semester;
     }

@@ -21,7 +21,6 @@ public class LectureRepository {
         return lectureId;
     }
 
-
     //授業の取得
     public Lecture getLecture(String lectureId) {
         return lectureMap.get(lectureId);
