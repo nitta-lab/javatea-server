@@ -3,8 +3,7 @@ import java.util.*;
 public class Timetable {
     private String uid;
     private int year;
-    private HashMap<String,HashMap<Integer,String>> timetable = new HashMap<>();
-    private HashSet<String> lectureIds = new HashSet<>();
+    private Set<String> lectureIds = new HashSet<>();
 
     public Timetable(String uid,int year){
         this.uid = uid;

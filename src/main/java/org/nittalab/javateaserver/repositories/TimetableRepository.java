@@ -8,14 +8,15 @@ import java.time.LocalDate;
 @Repository
 public class TimetableRepository {
     //タイムテーブル情報を保存するHashMap
-    private HashMap<String,HashMap<Integer,Timetable>> timetableMap = new HashMap<>();
-    private static final int curYear = LocalDate.now().getYear();
+    private HashMap<String,TreeMap<Integer,Timetable>> timetableMap = new HashMap<>();
+    //private static final int curYear = LocalDate.now().getYear();
 
     //ユーザのタイムテーブルを作成
     //ユーザが存在するかどうかはuserRepositoryに丸投げ予定
     private void setTimetableMap(String uid){
         if(!timetableMap.containsKey(uid)){
-            timetableMap.put(uid,new HashMap<>());
+            timetableMap.put(uid,new TreeMap<>());
+            int curYear = LocalDate.now().getYear();
             timetableMap.get(uid).put(curYear,new Timetable(uid, curYear));
         }
     }
