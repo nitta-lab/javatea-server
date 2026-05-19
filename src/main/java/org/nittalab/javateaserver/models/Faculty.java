@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Faculty {
     private String faculty_name;
     private HashMap<String, Department> departments = new HashMap<>();
-    private HashMap<String, Lecture> lecturesOnFaculty = new HashMap<>();
+    private HashMap<String, Lecture> lecturesInFaculty = new HashMap<>();
 
     public Faculty(String faculty_name) {
         this.faculty_name = faculty_name;
@@ -31,10 +31,10 @@ public class Faculty {
     }
 
     public void addLecture(String lectureId, Lecture lecture) {
-        lecturesOnFaculty.put(lectureId, lecture);
+        lecturesInFaculty.put(lectureId, lecture);
     }
 
     public Lecture getLecture(String lectureId) {
-        return lecturesOnFaculty.get(lectureId);
+        return lecturesInFaculty.get(lectureId);
     }
 }
