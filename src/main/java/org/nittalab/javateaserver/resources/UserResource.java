@@ -292,14 +292,11 @@ public class UserResource {
     }
 
 
-    // ここからqueryに修正するのとステータスコード付け足す
-
-
     //ユーザの学部の取得
     @GET
     @Path("/{uid}/faculty")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getFaculty(@PathParam("uid") String uid, @FormParam("token") String token) {
+    public Response getFaculty(@PathParam("uid") String uid, @QueryParam("token") String token) {
         //取得
         User user = userRepository.getUser(uid);
 
@@ -318,6 +315,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分の学部返す
         // まだgetFacultyはnullで返してる状態
 //        return Response.ok(user.getFaculty(), MediaType.TEXT_PLAIN).build();
 
@@ -333,6 +332,12 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response updateFaculty(@PathParam("uid") String uid, @FormParam("faculty") String faculty, @FormParam("token") String token) {
 
+        // 400 リクエスト方式が不正
+        if(faculty == null || faculty.isBlank()) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        // 404 ユーザが存在しません
         User user = userRepository.getUser(uid);
         if (user == null) {
             throw new WebApplicationException(
@@ -342,6 +347,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -349,6 +355,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分の学部登録
 //        //ニックネームアップデート→ここも学部に変える
 //        user.setFaculty(faculty);
         return Response.ok().build();
@@ -359,7 +367,9 @@ public class UserResource {
     @GET
     @Path("/{uid}/department")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getDepartment(@PathParam("uid") String uid, @FormParam("token") String token) {
+    public Response getDepartment(@PathParam("uid") String uid, @QueryParam("token") String token) {
+
+        // 404 ユーザが存在しません
         //取得
         User user = userRepository.getUser(uid);
         //存在チェック
@@ -369,6 +379,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -376,7 +387,9 @@ public class UserResource {
                             .build()
             );
         }
-        // まだgetFacultyはnullで返してる状態
+
+        // 200 自分の学科を返す
+        // まだgetDepartmentはnullで返してる状態
 //        return Response.ok(user.getDepartment(), MediaType.TEXT_PLAIN).build();
 
         return null;
@@ -390,6 +403,12 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response updateDepartment(@PathParam("uid") String uid, @FormParam("department") String department, @FormParam("token") String token) {
 
+        // 400 リクエスト方式が不正
+        if(department == null || department.isBlank()) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        // 404 ユーザが存在しません
         User user = userRepository.getUser(uid);
         if (user == null) {
             throw new WebApplicationException(
@@ -399,6 +418,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -406,6 +426,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分の学科登録
         //ニックネームアップデート→ここも学部に変える
 //        user.setDepartment(department);
         return Response.ok().build();
@@ -416,7 +438,8 @@ public class UserResource {
     @GET
     @Path("/{uid}/grade")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getGrade(@PathParam("uid") String uid, @FormParam("token") String token) {
+    public Response getGrade(@PathParam("uid") String uid, @QueryParam("token") String token) {
+        // 404 ユーザが存在しません
         //取得
         User user = userRepository.getUser(uid);
         //存在チェック
@@ -426,6 +449,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -433,6 +457,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分の学年を返す
         // まだgetFacultyはnullで返してる状態
 //        return Response.ok(user.getGrade(), MediaType.TEXT_PLAIN).build();
 
@@ -445,6 +471,12 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response updateGrade(@PathParam("uid") String uid, @FormParam("grade") String grade, @FormParam("token") String token) {
 
+        // 400 リクエスト方式が不正
+        if(grade == null || grade.isBlank()) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        // 404 ユーザが存在しません
         User user = userRepository.getUser(uid);
         if (user == null) {
             throw new WebApplicationException(
@@ -454,6 +486,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -461,6 +494,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分の学年登録
         //ニックネームアップデート→ここも学年に変える
 //        user.setGrade(grade);
         return Response.ok().build();
@@ -472,7 +507,9 @@ public class UserResource {
     @GET
     @Path("/{uid}/name")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getName(@PathParam("uid") String uid, @FormParam("token") String token) {
+    public Response getName(@PathParam("uid") String uid, @QueryParam("token") String token) {
+
+        // 404 ユーザが存在しません
         //取得
         User user = userRepository.getUser(uid);
         //存在チェック
@@ -482,6 +519,7 @@ public class UserResource {
             );
         }
 
+        // 401 認証エラー
         if (token == null || !token.equals(user.getToken())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.FORBIDDEN)
@@ -489,6 +527,8 @@ public class UserResource {
                             .build()
             );
         }
+
+        // 200 自分のニックネームを返す
 //        return Response.ok(user.getName(), MediaType.TEXT_PLAIN).build();
 
         return null;
