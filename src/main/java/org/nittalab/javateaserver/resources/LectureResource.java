@@ -4,7 +4,7 @@ import org.nittalab.javateaserver.models.Lecture;
 import org.nittalab.javateaserver.repositories.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 @Component
 public class LectureResource {
 
-    private LectureRepository lectureRepository = null;
+    private final LectureRepository lectureRepository;
 
     @Autowired
     public LectureResource(LectureRepository lectureRepository) {
@@ -47,7 +47,7 @@ public class LectureResource {
         }
 
         // 201 作成成功
-        String lectureId = lectureRepository.createLecture(name, grade, semester, frame, day, period);
+        lectureRepository.createLecture(name, grade, semester, frame, day, period);
         return Response.status(Response.Status.OK)
                 .build();
 
