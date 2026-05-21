@@ -17,6 +17,7 @@ public class CategoryRepository {
         universities.put("univ-id"+size,new University("univ-id"+size, name, kana)); //universityに大学が追加される。putは追加
         return universities.get("univ-id"+size); //getは取得。(Pythonのd[key])
     }
+
     public University getUniversity(String univ_id) {
         if (!universities.containsKey(univ_id)){ //univ-idが登録されていなければ、nullを返す。
             return null;
