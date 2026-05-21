@@ -41,7 +41,7 @@ public class User {
     }
 
     //パスワードの取得
-    @JsonIgnore
+    @JsonIgnore //getUserメゾットを実行した際に、出力されないようにする
     public String getPw(){
         return this.pw;
     }
@@ -91,8 +91,13 @@ public class User {
         this.grade = grade;
     }
 
+    //UserRepository.javaで生成されたtokenを代入
+    public void setToken(String token){
+        this.token = token;
+    }
+
     //UserのTokenを返すメゾット(生成はUserRepository.java)
-    @JsonIgnore
+    @JsonIgnore //getUserメゾットを実行した際に、出力されないようにする
     public String getToken(){
         return this.token;
     }
