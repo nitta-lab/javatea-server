@@ -25,28 +25,6 @@ import org.springframework.stereotype.Component;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
-/*
-//6/10報告:全部できた(friendまで)、UserRepositoryとの連携ができていない(updateあります？)、responseがない
-//6/17報告：すべてのユーザーの情報を持ってくるところ、フレンドペアの自分じゃない方のuidを返すところ、フレンドペアの削除はもらったものを連携できていない
-
-マスタからこのブランチへと取り込む
-ブランチ checkout
-masterからブランチへ引き込む
-Git → Merge → git merge origin/master
-
-別のクラスへのアクセス方法
-コンストラクタを作る
-import class
-コンストラクタの上に@Autowired これを入れるとspring bootが管理しているuserRepositoryのインスタンスを渡してくれる
-Repository側の説明　Repositoryをつけるとspring bootがインスタンスを1個だけ勝手に作ってくれる　シングルトン
-変数名は先頭小文字
-
-未コミットの編集→スタッシュで書き換えてしまったコードを退避させることができる
-
-ポストマンでテスト
-1.
-*/
-
 @Path("/users")
 @Component
 public class UserResource {
@@ -59,7 +37,6 @@ public class UserResource {
 //        this.applicationContext = applicationContext;
 //    }
 
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -69,66 +46,7 @@ public class UserResource {
 
     //@Path("/{uid}/..")などパスを指定する
 
-
-//    //アカウントの基本情報　ここもGETすることないから多分いらない
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    /*関数の名前を適切なものに変更する
-//    関数の引数に@PathParam("uid") String uidのような形でパラメーターを定義しておく
-//    Queryの場合は@QueryParam("filter") String filter
-//    repositoryのメソッド名：add, get, delete
-//    本来の流れはインターフェースだけ決めておく　メソッド名と引数名*/
-//    public Response getUsers() {
-//        List<String> users = userRepository.getAllUsers();
-//        if (users.isEmpty()) {
-//            return Response.noContent().build();
-//        }
-//        return Response.ok(users).build();
-//    }
-
-
-//    //新規アカウントを作る　　ここもおそらくいらない
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    public Response createUser(@FormParam("uid") String userId, @FormParam("password") String password) {
-//
-//        if (isBlank(userId) || isBlank(password)) {
-//            throw new WebApplicationException(
-//                    Response.status(Response.Status.BAD_REQUEST)
-//                            .entity("ユーザーIDおよびパスワードを入力してください")
-//                            .build());
-//        }
-//
-//
-//        //ユーザーIDが存在しているか調べる
-//        ArrayList userIdList = new ArrayList();
-//        userIdList.add(userRepository.getAllUsers());
-//        for (int i = 0; i < userIdList.size(); i++) {
-//            if(userId.equals(userIdList.get(i).toString())) {
-//                throw new WebApplicationException(Response.Status.CONFLICT);
-//            }
-//        }
-//
-//        User existingUser = userRepository.getUser(userId);
-//        if (existingUser != null) {
-//            return Response.status(Response.Status.CONFLICT)
-//                    .entity("ユーザーIDが重複しています")
-//                    .build();
-//        }
-//
-//        User newUser = userRepository.addUser(userId, password);
-//
-//        //6/12ここはswaggerではなくコードを仕様にすると決定しました。
-//        //return Response.ok(user.login(), MediaType.APPLICATION_JSON).build();
-//        return Response.status(Response.Status.CREATED)
-//                .entity(newUser)   // 仮に JSON を返したい場合
-//                .build();
-//
-//    }
-//
-
-    //新規アカウントを登録、フォームパラメータ関係まだやってない
+    //新規アカウントを登録、ここ名前の付け方良くないかも
     @PUT
     @Path("/{uid}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -164,9 +82,15 @@ public class UserResource {
         }
 
 //        // 200 正常にユーザID登録
-////        User newUser = userRepository.createUser(uid, name, pw);
-//        user.setUser(uid);
-        return Response.ok().build();
+        User newUser = userRepository.createUser(uid, name, pw);
+
+//        user.setUid(uid);
+
+        // ここ作った返答いる？
+        return Response.status(Response.Status.CREATED)
+                .entity(newUser)
+                .build();
+//        return Response.ok().build();
     }
 
 
@@ -532,8 +456,5 @@ public class UserResource {
 //        return Response.ok(user.getName(), MediaType.TEXT_PLAIN).build();
 
         return null;
-
-
     }
 }
-
