@@ -61,12 +61,12 @@ public class UserResource {
                             .build());
         }
 
-//        // 409 ユーザーIDが重複していないかか調べる
-//        ArrayList<String> uidLists = userRepository.getAllUsers();
-//        for (String uidList : uidLists) {
-//            if (uidList != null && uidList.equals(uid)) {
-//                throw new WebApplicationException(Response.status(Response.Status.CONFLICT).entity("ユーザが重複しています").build());
-//            }
+//        // 409 ユーザーIDが重複していないかか調べる　
+//        if (userRepository.checkDuplicate(uid)) {
+//            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
+//                                                      .entity("ユーザが重複しています")
+//                                                      .build()
+//            );
 //        }
 
 
