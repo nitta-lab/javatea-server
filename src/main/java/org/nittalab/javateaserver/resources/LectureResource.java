@@ -25,7 +25,7 @@ public class LectureResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response addLecture(
+    public void addLecture(
             @FormParam("name") String name,
             @FormParam("grade") Integer grade,
             @FormParam("semester") String semester,
@@ -41,15 +41,15 @@ public class LectureResource {
                 || day == null || day.isEmpty()
                 || period == null) {
 
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // 201 作成成功
         lectureRepository.createLecture(name, grade, semester, frame, day, period);
-        return Response.status(Response.Status.OK)
-                .build();
 
 //        // 404 データが存在しない　→　ここではエラー404は必要ない
 //        // 500 予期せぬエラー　→　ここではエラー500は必要ない
@@ -59,36 +59,36 @@ public class LectureResource {
     @Path("/{lecture-id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLecture(@PathParam("lecture-id") String lectureId)
+    public Lecture getLecture(@PathParam("lecture-id") String lectureId)
     {
         Lecture lecture = lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
         // 200
-        return Response.status(Response.Status.OK)
-                .entity(lecture)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture;
     }
 
     //動作確認済み
     @Path("/{lecture-id}/name")
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putLectureName(
+    public void putLectureName(
             @PathParam("lecture-id") String lectureId,
             @FormParam("name") String name
     ) {
         // 400 不正なリクエスト
         if (name == null || name.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // Repositoryで更新
@@ -96,18 +96,14 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
         lecture.setName(name);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("授業名を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
     //動作確認済み
@@ -115,7 +111,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLectureName(
+    public String getLectureName(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -123,18 +119,15 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
-        String name = lecture.getName();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(name)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getName();
     }
 
     //動作確認済み
@@ -143,16 +136,18 @@ public class LectureResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response putLectureGrade(
+    public void putLectureGrade(
             @PathParam("lecture-id") String lectureId,
             @FormParam("grade") Integer grade
     ) {
 
         // 400 不正なリクエスト
         if (grade == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // Repositoryで更新
@@ -160,18 +155,14 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
         lecture.setGrade(grade);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("受講可能学年を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
     //動作確認済み
@@ -179,7 +170,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLectureGrade(
+    public int getLectureGrade(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -187,18 +178,15 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
-        int grade = lecture.getGrade();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(grade)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getGrade();
     }
 
     //動作確認済み
@@ -207,16 +195,18 @@ public class LectureResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response putLectureSemester(
+    public void putLectureSemester(
             @PathParam("lecture-id") String lectureId,
             @FormParam("semester") String semester
     ) {
 
         // 400 不正なリクエスト
         if (semester == null || semester.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // Repositoryで更新
@@ -224,18 +214,14 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
         lecture.setSemester(semester);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("学期区分を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
     //動作確認済み
@@ -243,7 +229,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLectureSemester(
+    public String getLectureSemester(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -251,18 +237,15 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
-        String semester = lecture.getSemester();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(semester)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getSemester();
     }
 
     //動作確認済み
@@ -271,15 +254,17 @@ public class LectureResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response putLectureFrame(
+    public void putLectureFrame(
             @PathParam("lecture-id") String lectureId,
             @FormParam("frame") Integer frame
     ) {
         // 400 不正なリクエスト
         if (frame == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // Repositoryで更新
@@ -287,12 +272,6 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
 
         lecture.setFrame(frame);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("コマ数を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
     //動作確認済み
@@ -300,7 +279,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLectureFrame(
+    public int getLectureFrame(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -309,18 +288,15 @@ public class LectureResource {
 
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
-        int frame = lecture.getFrame();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(frame)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getFrame();
     }
 
     //動作確認済み
@@ -329,15 +305,17 @@ public class LectureResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response putLectureDay(
+    public void putLectureDay(
             @PathParam("lecture-id") String lectureId,
             @FormParam("day") String day
     ) {
         // 400 不正なリクエスト
         if (day == null || day.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("必要な情報が不足しています。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
+                            .build()
+            );
         }
 
         // Repositoryで更新
@@ -345,18 +323,14 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
         lecture.setDay(day);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("開講曜日を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
 
@@ -365,7 +339,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLectureDay(
+    public String getLectureDay(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -373,18 +347,15 @@ public class LectureResource {
                 lectureRepository.getLecture(lectureId);
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
-        String week = lecture.getDay();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(week)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getDay();
     }
 
     //動作確認済み
@@ -393,15 +364,17 @@ public class LectureResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response putLecturePeriod(
+    public void putLecturePeriod(
             @PathParam("lecture-id") String lectureId,
             @FormParam("period") Integer period
     ) {
         // 400 不正なリクエスト
         if (period == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
                     .entity("必要な情報が不足しています。")
-                    .build();
+                    .build()
+            );
         }
 
         // Repositoryで更新
@@ -410,18 +383,14 @@ public class LectureResource {
 
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
 
         lecture.setPeriod(period);
-        // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity("開講時限を変更しました。")
-                .build();
-
-        // 500はサーバ側で自動
     }
 
     //動作確認済み
@@ -429,7 +398,7 @@ public class LectureResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Response getLecturePeriod(
+    public int getLecturePeriod(
             @PathParam("lecture-id") String lectureId
     ) {
         // Repositoryから取得
@@ -438,19 +407,13 @@ public class LectureResource {
 
         // 404
         if (lecture == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("lecture が存在しません。")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
         }
-
-        int time = lecture.getPeriod();
         // 200 成功
-        return Response.status(Response.Status.OK)
-                .entity(time)
-                .build();
-
-        // 500はサーバ側で自動
+        return lecture.getPeriod();
     }
-
-
 }
