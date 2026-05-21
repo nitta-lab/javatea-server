@@ -4,7 +4,7 @@ import org.nittalab.javateaserver.models.Lecture;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -20,7 +20,6 @@ public class LectureRepository {
         lectureMap.put(lectureId, new Lecture(name, grade, semester, frame, day, period));
         return lectureId;
     }
-
 
     //授業の取得
     public Lecture getLecture(String lectureId) {
