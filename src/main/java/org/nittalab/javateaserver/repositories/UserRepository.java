@@ -4,6 +4,7 @@ import org.nittalab.javateaserver.models.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Repository
 public class UserRepository {
@@ -33,4 +34,7 @@ public class UserRepository {
     }
 
     //Tokenの生成
+    public String createToken(String uid){
+        return null;
+    }
 }
