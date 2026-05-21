@@ -1,6 +1,5 @@
 package org.nittalab.javateaserver.resources;
 
-
 import org.nittalab.javateaserver.models.Department;
 import org.nittalab.javateaserver.models.Faculty;
 import org.nittalab.javateaserver.models.Lecture;
@@ -85,6 +84,11 @@ public class CategoryDepartmentResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        /*
+        500 internal server error
+        spring bootが500を返してくれるからコードなし
+         */
+
         //200 ok
         faculty.createDepartment(departmentName);
         return Response.status(Response.Status.OK).build();
@@ -120,6 +124,11 @@ public class CategoryDepartmentResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        /*
+        500 internal server error
+        spring bootが500を返してくれるからコードなし
+         */
+
         ArrayList<String> lectureIds = new ArrayList<>(department.getLectures().keySet());
 
         //200 ok
@@ -154,6 +163,11 @@ public class CategoryDepartmentResource {
         if (department == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        /*
+        500 internal server error
+        spring bootが500を返してくれるからコードなし
+         */
 
         Lecture lecture = lectureRepository.getLecture(lectureId);
 
