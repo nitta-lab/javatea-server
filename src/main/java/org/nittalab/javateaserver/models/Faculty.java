@@ -24,7 +24,7 @@ public class Faculty {
         this.departments.put(department_name, new Department(department_name));
     }
 
-    //名称(ID)で指定された学部の取得
+    //名称(ID)で指定された学部の取得(念のため)
     public Department getDepartment(String department_name){
         if (!departments.containsKey(department_name)){
             return null; //指定先がなければnullを返す
