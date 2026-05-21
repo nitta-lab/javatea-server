@@ -24,4 +24,9 @@ public class CategoryRepository {
         }
         return universities.get(univ_id);
     }
+
+    //大学一覧を取得
+    public HashMap<String, University> getUniversities() {
+        return universities;
+    }
 }
