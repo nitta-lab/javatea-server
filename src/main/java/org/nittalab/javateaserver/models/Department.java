@@ -25,7 +25,7 @@ public class Department {
     //lecture_IDで指定された授業科目の取得(念のため)
     public Lecture getLecture(String lectureId) {
         if (!lecturesInDepartment.containsKey(lectureId)){
-            return null;
+            return null; //指定先がなければnullを返す
         }
 
         return lecturesInDepartment.get(lectureId);

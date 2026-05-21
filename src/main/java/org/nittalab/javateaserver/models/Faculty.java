@@ -27,7 +27,7 @@ public class Faculty {
     //名称(ID)で指定された学部の取得
     public Department getDepartment(String department_name){
         if (!departments.containsKey(department_name)){
-            return null;
+            return null; //指定先がなければnullを返す
         }
 
         return this.departments.get(department_name);
@@ -46,7 +46,7 @@ public class Faculty {
     //lecture_IDで指定された授業科目の取得(念のため)
     public Lecture getLecture(String lectureId) {
         if (!lecturesInFaculty.containsKey(lectureId)){
-            return null;
+            return null; //指定先がなければnullを返す
         }
 
         return lecturesInFaculty.get(lectureId);
