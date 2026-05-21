@@ -1,5 +1,7 @@
 package org.nittalab.javateaserver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class User {
 
     private String uid;
@@ -9,6 +11,7 @@ public class User {
     private String faculty;
     private String department;
     private int grade;
+    private String token;
 
     //渡されたuid, name, pwをフィールドに代入
     public User(String uid, String name, String pw){
@@ -19,27 +22,79 @@ public class User {
 
     //uidの取得
     public String getUid(){
-        return uid;
+        return this.uid;
     }
 
-    //setUid
-    //getName
-    //setName
-    //getPw
-    //setPw
-    //getUniversity
-    //setUniversity
-    //getFaculty
-    //setFaculty
-    //getDepartment
-    //setDepartment
-    //getGrade
-    //setGrade
+    //uidの代入
+    public void setUid(String uid){
+        this.uid = uid;
+    }
 
-    //UserのTokenを返すメゾット
+    //ユーザ名の取得
+    public String getName(){
+        return this.name;
+    }
+
+    //ユーザ名の代入
+    public void setName(String name){
+        this.name = name;
+    }
+
+    //パスワードの取得
+    @JsonIgnore
+    public String getPw(){
+        return this.pw;
+    }
+
+    //パスワードの代入
+    public void setPw(String pw){
+        this.pw = pw;
+    }
+
+    //所属大学名の取得
+    public String getUniversity(){
+        return this.university;
+    }
+
+    //所属大学名の代入
+    public void setUniversity(String university){
+        this.university = university;
+    }
+
+    //所属学部の取得
+    public String getFaculty(){
+        return this.faculty;
+    }
+
+    //所属学部の代入
+    public void setFaculty(String faculty){
+        this.faculty = faculty;
+    }
+
+    //所属学科の取得
+    public String getDepartment(){
+        return this.department;
+    }
+
+    //所属学科の代入
+    public void setDepartment(String department){
+        this.department = department;
+    }
+
+    //ユーザの学年の取得
+    public Integer getGrade(){
+        return this.grade;
+    }
+
+    //ユーザの学年の代入
+    public void setGrade(Integer grade){
+        this.grade = grade;
+    }
+
+    //UserのTokenを返すメゾット(生成はUserRepository.java)
+    @JsonIgnore
     public String getToken(){
-        return null;
+        return this.token;
     }
 
-    //setToken
 }
