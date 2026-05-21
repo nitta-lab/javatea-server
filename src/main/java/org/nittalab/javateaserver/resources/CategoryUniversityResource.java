@@ -30,7 +30,7 @@ public class CategoryUniversityResource {
 
         //getAllIdで一覧取得
         return Response
-                .ok(getAllId(), MediaType.APPLICATION_JSON)
+                .ok(categoryRepository.getAllId(), MediaType.APPLICATION_JSON)
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class CategoryUniversityResource {
                 .build();
     }
 
-    @Path("/categories/universities/{univ-id}")
+    @Path("/{univ-id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnivInfo(
@@ -86,16 +86,13 @@ public class CategoryUniversityResource {
 
     //大学名を登録・更新→指定された大学IDに対応する大学名を登録または更新する。
     @PUT
-    @Path("/categories/universities/{univ-id}/name")
+    @Path("/{univ-id}/name")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public  Response updateUnivName(@PathParam("univ-id") String univId, @FormParam("name") String name) {
         //404エラー
         if (univId == null || name == null) {
 
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("指定された大学IDが存在しません")
-                    .build();
+            return Response.ok().build();
         }
 
         //200登録成功putUnivName
@@ -105,9 +102,10 @@ public class CategoryUniversityResource {
     }
 
     //大学の読み仮名変更
-    @Path("/categories/universities/{univ-id}/kana")
+    @PUT
+    @Path("/{univ-id}/kana")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public  Response updateUnivName(@PathParam("univ-id") String univId, @FormParam("name") String name) {
+    public  Response updateUnivKana(@PathParam("univ-id") String univId, @FormParam("name") String name) {
         //404エラー
         if (univId == null || name == null) {
 
@@ -118,14 +116,12 @@ public class CategoryUniversityResource {
         }
 
         //200登録成功putUnivKana
-        return Response
-                .ok(categoryRepository.putUnivKana(), MediaType.TEXT_PLAIN)
-                .build();
+        return Response.ok().build();
     }
 
     //大学全般に属する科目一覧（ID)の取得。
     @GET
-    @Path("/categories/universities/{univ-id}/lectures")
+    @Path("/{univ-id}/lectures")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getUnivLectures(@PathParam("univ-id") String univId) {
 
@@ -139,12 +135,12 @@ public class CategoryUniversityResource {
 
         //getLectIdで授業IDを取得
         return Response
-                .ok(categoryRepository.getLectId(), MediaType.TEXT_PLAIN)
+                .ok(lectureRepository.getLectId(), MediaType.TEXT_PLAIN)
                 .build();
     }
 
     @PUT
-    @Path("/categories/universities/{univ-id}/lectures/{lecture-id}")
+    @Path("/{univ-id}/lectures/{lecture-id}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response putUnivLectures(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectId) {
         //404データが存在しない
@@ -156,9 +152,7 @@ public class CategoryUniversityResource {
         }
 
         //putLectIdで大学全般科目の授業IDを追加
-        return Response
-                .ok(categoryRepository.putLectId(), MediaType.APPLICATION_JSON)
-                .build();
+        return Response.ok().build();
     }
 
 }
