@@ -12,7 +12,7 @@ public class UserRepository {
 
     //test用(起動時にユーザ登録)
     public UserRepository(){
-        User user0 = new User("test01", "testUser01", "testpass01");
+        User user0 = createUser("test01", "testUser01", "testpass01");
         userMap.put(user0.getUid(), user0);
     }
 
@@ -33,8 +33,9 @@ public class UserRepository {
         return userMap.containsKey(uid);
     }
 
-    //Tokenの生成
+    //Tokenの生成(生成したTokenを返す)
     public String createToken(String uid){
-        return null;
+        userMap.get(uid).setToken(UUID.randomUUID().toString());
+        return userMap.get(uid).getToken();
     }
 }
