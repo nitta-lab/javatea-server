@@ -7,7 +7,6 @@ public class University {
     //関数は動詞名詞
     //getは取ってくる(変更はなし)、setは設定(まるごと入れ替え)、putは一部書き換え,removeは削除
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
-    private String faculty_name;
     private String univ_id;
     private String name;
     private String kana;
