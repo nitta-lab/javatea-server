@@ -8,7 +8,6 @@ public class Lecture {
     private int frame;
     private String day;
     private int period;
-    private String lectureId;
 
     public Lecture(String name, int grade, String semester, int frame, String day, int period) {
         this.name = name;
@@ -39,7 +38,6 @@ public class Lecture {
         return semester;
     }
 
-
     public void setSemester(String semester) {
         this.semester = semester;
     }
@@ -66,13 +64,5 @@ public class Lecture {
 
     public void setPeriod(int period) {
         this.period = period;
-    }
-
-    public String getLectureId() {
-        return lectureId;
-    }
-
-    public void setLectureId(String lectureId) {
-        this.lectureId = lectureId;
     }
 }
