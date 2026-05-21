@@ -65,5 +65,4 @@ public class Lecture {
     public void setPeriod(int period) {
         this.period = period;
     }
-
 }
