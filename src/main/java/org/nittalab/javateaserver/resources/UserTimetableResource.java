@@ -94,7 +94,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putYear(@PathParam("uid") String uid, @PathParam("year") int year, @FormParam("token") String token) {
+    public Response addYear(@PathParam("uid") String uid, @PathParam("year") int year, @FormParam("token") String token) {
         // ユーザの存在チェック
         User user = userRepository.getUser(uid);
         if (uid == null || user == null) {
@@ -122,7 +122,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}/{lecture-id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+    public Response addLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
         // ユーザの存在チェック
         User user = userRepository.getUser(uid);
         if (uid == null || user == null) {
@@ -164,7 +164,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}/{lecture-id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putYear(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+    public Response removeYear(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
         // ユーザの存在チェック
         User user = userRepository.getUser(uid);
         if (uid == null || user == null) {
