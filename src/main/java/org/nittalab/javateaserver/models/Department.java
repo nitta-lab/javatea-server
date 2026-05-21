@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Department {
     private String department_name; //学科の名称(ID代わり)
-    private HashMap<String, Lecture> lecturesInDepartment = new HashMap<>(); //学科特有の科目(ID, 授業科目)
+    private HashMap<String, Lecture> lecturesInDepartment; //学科特有の科目(ID, 授業科目)
 
     //コンストラクタ
     public Department(String department_name) {
