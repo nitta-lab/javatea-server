@@ -45,6 +45,67 @@ public class UserResource {
     }
 
     //@Path("/{uid}/..")などパスを指定する
+    //単一アカウントの情報を返す
+    @GET
+    @Path("/{uid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response getUser(@PathParam("uid") String userId) {
+        //取得
+        User user = userRepository.getUser(userId);
+        //存在の確認
+        if (user == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        return Response.ok().build();
+    }
+
+//    //新規アカウントを登録、ここ名前の付け方良くないかも
+//    @PUT
+//    @Path("/{uid}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    public User createUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
+//
+//        // 400 リクエスト方式が不正
+//        if (isBlank(uid) || isBlank(name) || isBlank(pw)) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.BAD_REQUEST)
+//                            .entity("ユーザーID,ニックネームおよびパスワードを入力してください")
+//                            .build());
+//        }
+//
+////        // 409 ユーザーIDが重複していないかか調べる　
+////        if (userRepository.checkDuplicate(uid)) {
+////            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
+////                                                      .entity("ユーザが重複しています")
+////                                                      .build()
+////            );
+////        }
+//
+//
+//        //取得
+//        User user = userRepository.getUser(uid);
+//
+//        // 404 ユーザが存在しません
+//        //存在チェック
+//        if (user == null) {
+//            throw new WebApplicationException(
+//                    Response.Status.NOT_FOUND
+//            );
+//        }
+//
+////        // 200 正常にユーザID登録
+////        User newUser = userRepository.createUser(uid, name, pw);
+//
+////        user.setUid(uid);
+//
+//        // ここ作った返答いる？
+//        return user.getUid();
+////        return Response.ok().build();
+//    }
+
 
     //新規アカウントを登録、ここ名前の付け方良くないかも
     @PUT
@@ -171,9 +232,9 @@ public class UserResource {
 
         // 200　自分の大学返す　
         // まだgetUniversityはnullで返してる状態
-//        return Response.ok(user.getUniversity(), MediaType.TEXT_PLAIN).build();
+        return Response.ok(user.getUniversity(), MediaType.TEXT_PLAIN).build();
 
-        return null;
+//        return null;
 
 
     }
