@@ -4,6 +4,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.nittalab.javateaserver.models.University;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,133 +27,124 @@ public class CategoryUniversityResource {
     // 大学一覧の取得
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllUnivId() {
+    public University getAllUnivId() {
 
         //getAllIdで一覧取得
-        return Response
-                .ok(categoryRepository.getAllId(), MediaType.APPLICATION_JSON)
-                .build();
+        return categoryRepository.getUniversites();
     }
 
     // 大学の新規作成
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response postNewUnivId(
+    public String postNewUnivId(
             @FormParam("name") String name,
             @FormParam("kana") String kana) {
 
         // 400 不正なリクエスト
         if (name == null || kana == null) {
-
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .entity("登録対象が見つかりません")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("登録者が見つかりません")
+                            .build());
         }
 
         // 201 作成成功、作成したuniv-idを返す
         //createUnivIdで名前と仮名を作成する→大学の作成
-        String createdUnivId =
-                categoryRepository.createUnivId(name, kana);
 
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(createdUnivId)
-                .build();
+
+        return categoryRepository.createUniversity(name, kana);
     }
 
     @Path("/{univ-id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUnivInfo(
+    public University getUnivInfo(
             @PathParam("univ-id") String univId) {
 
         // 404 指定された大学IDが存在しません
         if (univId == null) {
 
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("指定された大学IDが存在しません")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
         }
 
         // 200 OK
         //getUnivNameKana→指定した大学情報（読みとかなを取得）
-        return Response
-                .ok(categoryRepository.getUnivNameKana(), MediaType.APPLICATION_JSON)
-                .build();
+        return categoryRepository.getUniversity();
     }
 
     //大学名を登録・更新→指定された大学IDに対応する大学名を登録または更新する。
     @PUT
     @Path("/{univ-id}/name")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public  Response updateUnivName(@PathParam("univ-id") String univId, @FormParam("name") String name) {
+    public  void updateUnivName(@PathParam("univ-id") String univId, @FormParam("name") String name) {
         //404エラー
         if (univId == null || name == null) {
 
-            return Response.ok().build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .build());
         }
 
         //200登録成功putUnivName
-        return Response
-                .ok(categoryRepository.putUnivName(), MediaType.TEXT_PLAIN)
-                .build();
+        //setName
     }
 
     //大学の読み仮名変更
     @PUT
     @Path("/{univ-id}/kana")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public  Response updateUnivKana(@PathParam("univ-id") String univId, @FormParam("name") String name) {
+    public  void updateUnivKana(@PathParam("univ-id") String univId, @FormParam("name") String name) {
         //404エラー
         if (univId == null || name == null) {
 
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("指定された大学IDが存在しません")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
         }
-
         //200登録成功putUnivKana
-        return Response.ok().build();
+        //setKana
     }
 
     //大学全般に属する科目一覧（ID)の取得。
     @GET
     @Path("/{univ-id}/lectures")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getUnivLectures(@PathParam("univ-id") String univId) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public University getUnivLectures(@PathParam("univ-id") String univId) {
 
         //400失敗
         if (univId == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("データが存在しません")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("データが存在しません")
+                            .build());
         }
 
         //getLectIdで授業IDを取得
-        return Response
-                .ok(lectureRepository.getLectId(), MediaType.TEXT_PLAIN)
-                .build();
+        return lectureRepository.getLectures();
     }
 
     @PUT
     @Path("/{univ-id}/lectures/{lecture-id}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putUnivLectures(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectId) {
+    public void putUnivLectures(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectId) {
         //404データが存在しない
         if (univId == null || lectId == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("データが存在しません")
-                    .build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("データが存在しません")
+                            .build());
         }
 
         //putLectIdで大学全般科目の授業IDを追加
-        return Response.ok().build();
+        //addLecture
     }
 
 }
+
+
+//関数名変更したから、PUTのとこで更新追加のとこのコードを作る。
