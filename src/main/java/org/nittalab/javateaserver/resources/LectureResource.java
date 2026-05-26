@@ -25,7 +25,7 @@ public class LectureResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    public void addLecture(
+    public String createLecture(
             @FormParam("name") String name,
             @FormParam("grade") Integer grade,
             @FormParam("semester") String semester,
@@ -49,7 +49,7 @@ public class LectureResource {
         }
 
         // 201 作成成功
-        lectureRepository.createLecture(name, grade, semester, frame, day, period);
+        return lectureRepository.createLecture(name, grade, semester, frame, day, period);
 
 //        // 404 データが存在しない　→　ここではエラー404は必要ない
 //        // 500 予期せぬエラー　→　ここではエラー500は必要ない
@@ -270,6 +270,14 @@ public class LectureResource {
         // Repositoryで更新
         Lecture lecture =
                 lectureRepository.getLecture(lectureId);
+        // 404
+        if (lecture == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("lecture が存在しません。")
+                            .build()
+            );
+        }
 
         lecture.setFrame(frame);
     }
