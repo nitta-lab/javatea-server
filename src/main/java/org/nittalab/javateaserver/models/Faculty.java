@@ -24,7 +24,6 @@ public class Faculty {
 
         //学科が既に存在していた場合はnullを返す
         if (departments.containsKey(department_name)){
-            System.out.println("Department already exists.");
             return null;
         }
 
