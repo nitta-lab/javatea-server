@@ -22,10 +22,10 @@ public class Faculty {
     //学部の作成、追加
     public Department createDepartment(String department_name){
 
-        //学科が既に存在していた場合はその学科を返す
+        //学科が既に存在していた場合はnullを返す
         if (departments.containsKey(department_name)){
             System.out.println("Department already exists.");
-            return this.departments.get(department_name);
+            return null;
         }
 
         this.departments.put(department_name, new Department(department_name));
