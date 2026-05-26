@@ -160,6 +160,32 @@ public class UserResource {
         return userRepository.createToken(uid);
     }
 
+    // ログアウト時にTokenをnullで上書きしてそのユーザーがTokenを持ってない状態に戻す
+    @PUT
+    @Path("{uid}/login")
+    @Produces(MediaType.TEXT_PLAIN)
+    public void deleteToken(@PathParam("uid") String uid, @QueryParam("token") String token) {
+        User user = userRepository.getUser(uid);
+
+        // 404 ユーザが存在しません
+        //存在チェック
+        if (user == null) {
+            throw new WebApplicationException(
+                    Response.Status.NOT_FOUND
+            );
+        }
+
+        // 401 認証エラー
+        if (token == null || !token.equals(user.getToken())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.FORBIDDEN)
+                            .entity("認証失敗")
+                            .build()
+            );
+        }
+
+//        userRepository.deleteToken(uid);
+    }
 
 
     //ユーザの大学の取得
