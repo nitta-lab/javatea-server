@@ -45,12 +45,13 @@ public class UserResource {
     }
 
     //@Path("/{uid}/..")などパスを指定する
-    //単一アカウントの情報を返す
+    // 実際はおそらく叩かないけども、確認用で置いてるもの(叩けてしまうとセキュリティの問題出てしまう)
+    // パスワードやtokenについて、Userにある@JsonIgnoreを消すと見えるようになる
     @GET
     @Path("/{uid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response getUser(@PathParam("uid") String userId) {
+    public User getUser(@PathParam("uid") String userId) {
         //取得
         User user = userRepository.getUser(userId);
         //存在の確認
@@ -58,61 +59,18 @@ public class UserResource {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        return Response.ok().build();
+        return user;
     }
 
-//    //新規アカウントを登録、ここ名前の付け方良くないかも
-//    @PUT
-//    @Path("/{uid}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    public User createUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
-//
-//        // 400 リクエスト方式が不正
-//        if (isBlank(uid) || isBlank(name) || isBlank(pw)) {
-//            throw new WebApplicationException(
-//                    Response.status(Response.Status.BAD_REQUEST)
-//                            .entity("ユーザーID,ニックネームおよびパスワードを入力してください")
-//                            .build());
-//        }
-//
-////        // 409 ユーザーIDが重複していないかか調べる　
-////        if (userRepository.checkDuplicate(uid)) {
-////            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-////                                                      .entity("ユーザが重複しています")
-////                                                      .build()
-////            );
-////        }
-//
-//
-//        //取得
-//        User user = userRepository.getUser(uid);
-//
-//        // 404 ユーザが存在しません
-//        //存在チェック
-//        if (user == null) {
-//            throw new WebApplicationException(
-//                    Response.Status.NOT_FOUND
-//            );
-//        }
-//
-////        // 200 正常にユーザID登録
-////        User newUser = userRepository.createUser(uid, name, pw);
-//
-////        user.setUid(uid);
-//
-//        // ここ作った返答いる？
-//        return user.getUid();
-////        return Response.ok().build();
-//    }
 
 
-    //新規アカウントを登録、ここ名前の付け方良くないかも
+    //新規アカウントを登録、重複許さない状態なのでおそらくセキュリティ問題ないはず
+    // (前回と同じIDでもう一度作ろうとすると、重複と出るはず)
     @PUT
     @Path("/{uid}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
+    public User createUser(@PathParam("uid") String uid, @FormParam("name") String name, @FormParam("pw") String pw) {
 
         // 400 リクエスト方式が不正
         if (isBlank(uid) || isBlank(name) || isBlank(pw)) {
@@ -122,36 +80,28 @@ public class UserResource {
                             .build());
         }
 
-//        // 409 ユーザーIDが重複していないかか調べる　
-//        if (userRepository.checkDuplicate(uid)) {
-//            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-//                                                      .entity("ユーザが重複しています")
-//                                                      .build()
-//            );
-//        }
-
-
-        //取得
-        User user = userRepository.getUser(uid);
-
-        // 404 ユーザが存在しません
-        //存在チェック
-        if (user == null) {
-            throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+        // 409 ユーザーIDが重複していないかか調べる　
+        if (userRepository.checkDuplicate(uid)) {
+            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
+                                                      .entity("ユーザが重複しています")
+                                                      .build()
             );
         }
 
-//        // 200 正常にユーザID登録
-        User newUser = userRepository.createUser(uid, name, pw);
 
-//        user.setUid(uid);
+        // ここがいらない可能性あり、userが追加できなくなる
+//        //取得
+//        User user = userRepository.getUser(uid);
+//        // 404 ユーザが存在しません
+//        //存在チェック
+//        if (user == null) {
+//            throw new WebApplicationException(
+//                    Response.Status.NOT_FOUND
+//            );
+//        }
 
-        // ここ作った返答いる？
-        return Response.status(Response.Status.CREATED)
-                .entity(newUser)
-                .build();
-//        return Response.ok().build();
+        // 200 正常にユーザID登録、uid,name,pwはここで記憶される
+        return userRepository.createUser(uid, name, pw);
     }
 
 
@@ -161,7 +111,7 @@ public class UserResource {
     @Path("/{uid}/login")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
+    public String login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
 
         // 400 不正なリクエスト
         if (uid == null || uid.isBlank()) {
@@ -188,19 +138,19 @@ public class UserResource {
             );
         }
 
-//        //パスワードチェック 適切なステータスはなんですか？
-//        if (!pw.equals(user.getPassword())) {
-//            throw new WebApplicationException(
-//                    Response.status(Response.Status.UNAUTHORIZED)
-//                            .entity("パスワードが間違っています")
-//                            .build()
-//            );
-//        }
+        //パスワードチェック 適切なステータスはなんですか？
+        if (!pw.equals(user.getPw())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.UNAUTHORIZED)
+                            .entity("パスワードが間違っています")
+                            .build()
+            );
+        }
 
-        //200 トークン発行成功
-        String token = user.getToken();
-        return Response.ok(token).build();
-
+//        String token = userRepository.createToken(uid);
+//        user.setToken(token);
+        //200 トークン発行成功　tokenはここで記憶される
+        return userRepository.createToken(uid);
     }
 
 
@@ -209,7 +159,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/university")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getUniversity(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public String getUniversity(@PathParam("uid") String uid, @QueryParam("token") String token) {
         //取得
         User user = userRepository.getUser(uid);
 
@@ -231,19 +181,14 @@ public class UserResource {
         }
 
         // 200　自分の大学返す　
-        // まだgetUniversityはnullで返してる状態
-        return Response.ok(user.getUniversity(), MediaType.TEXT_PLAIN).build();
-
-//        return null;
-
-
+        return user.getUniversity();
     }
 
     //ユーザの大学の登録
     @PUT
     @Path("/{uid}/university")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response updateUniversity(@PathParam("uid") String uid, @FormParam("university") String university, @FormParam("token") String token) {
+    public void updateUniversity(@PathParam("uid") String uid, @FormParam("university") String university, @FormParam("token") String token) {
 
         // 400 リクエスト方式が不正です
         if(university == null || university.isBlank()) {
@@ -269,11 +214,8 @@ public class UserResource {
             );
         }
 
-//        // 200　正常に自分の大学登録
-//        // setUniversityはまだ
-//        user.setUniversity(university);
-        return Response.ok().build();
-
+        // 200　正常に自分の大学登録
+        user.setUniversity(university);
     }
 
 
@@ -281,7 +223,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/faculty")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getFaculty(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public String getFaculty(@PathParam("uid") String uid, @QueryParam("token") String token) {
         //取得
         User user = userRepository.getUser(uid);
 
@@ -302,12 +244,7 @@ public class UserResource {
         }
 
         // 200 自分の学部返す
-        // まだgetFacultyはnullで返してる状態
-//        return Response.ok(user.getFaculty(), MediaType.TEXT_PLAIN).build();
-
-        return null;
-
-
+        return user.getFaculty();
     }
 
 
@@ -315,7 +252,7 @@ public class UserResource {
     @PUT
     @Path("/{uid}/faculty")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response updateFaculty(@PathParam("uid") String uid, @FormParam("faculty") String faculty, @FormParam("token") String token) {
+    public void updateFaculty(@PathParam("uid") String uid, @FormParam("faculty") String faculty, @FormParam("token") String token) {
 
         // 400 リクエスト方式が不正
         if(faculty == null || faculty.isBlank()) {
@@ -342,9 +279,7 @@ public class UserResource {
         }
 
         // 200 自分の学部登録
-//        //ニックネームアップデート→ここも学部に変える
-//        user.setFaculty(faculty);
-        return Response.ok().build();
+        user.setFaculty(faculty);
     }
 
 
@@ -352,7 +287,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/department")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getDepartment(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public String getDepartment(@PathParam("uid") String uid, @QueryParam("token") String token) {
 
         // 404 ユーザが存在しません
         //取得
@@ -374,10 +309,7 @@ public class UserResource {
         }
 
         // 200 自分の学科を返す
-        // まだgetDepartmentはnullで返してる状態
-//        return Response.ok(user.getDepartment(), MediaType.TEXT_PLAIN).build();
-
-        return null;
+        return user.getDepartment();
 
 
     }
@@ -386,7 +318,7 @@ public class UserResource {
     @PUT
     @Path("/{uid}/department")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response updateDepartment(@PathParam("uid") String uid, @FormParam("department") String department, @FormParam("token") String token) {
+    public void updateDepartment(@PathParam("uid") String uid, @FormParam("department") String department, @FormParam("token") String token) {
 
         // 400 リクエスト方式が不正
         if(department == null || department.isBlank()) {
@@ -413,9 +345,7 @@ public class UserResource {
         }
 
         // 200 自分の学科登録
-        //ニックネームアップデート→ここも学部に変える
-//        user.setDepartment(department);
-        return Response.ok().build();
+        user.setDepartment(department);
     }
 
 
@@ -423,7 +353,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/grade")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getGrade(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public Integer getGrade(@PathParam("uid") String uid, @QueryParam("token") String token) {
         // 404 ユーザが存在しません
         //取得
         User user = userRepository.getUser(uid);
@@ -444,20 +374,17 @@ public class UserResource {
         }
 
         // 200 自分の学年を返す
-        // まだgetFacultyはnullで返してる状態
-//        return Response.ok(user.getGrade(), MediaType.TEXT_PLAIN).build();
-
-        return null;
+        return user.getGrade();
     }
 
     //ユーザの学年の登録
     @PUT
     @Path("/{uid}/grade")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response updateGrade(@PathParam("uid") String uid, @FormParam("grade") String grade, @FormParam("token") String token) {
+    public void updateGrade(@PathParam("uid") String uid, @FormParam("grade") Integer grade, @FormParam("token") String token) {
 
         // 400 リクエスト方式が不正
-        if(grade == null || grade.isBlank()) {
+        if(grade == null) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
@@ -481,9 +408,7 @@ public class UserResource {
         }
 
         // 200 自分の学年登録
-        //ニックネームアップデート→ここも学年に変える
-//        user.setGrade(grade);
-        return Response.ok().build();
+        user.setGrade(grade);
     }
 
 
@@ -492,7 +417,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/name")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getName(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public String getName(@PathParam("uid") String uid, @QueryParam("token") String token) {
 
         // 404 ユーザが存在しません
         //取得
@@ -514,8 +439,6 @@ public class UserResource {
         }
 
         // 200 自分のニックネームを返す
-//        return Response.ok(user.getName(), MediaType.TEXT_PLAIN).build();
-
-        return null;
+        return user.getName();
     }
 }
