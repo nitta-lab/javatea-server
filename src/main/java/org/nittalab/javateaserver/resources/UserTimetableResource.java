@@ -33,7 +33,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<Integer> getYears(@PathParam("uid") String uid, @QueryParam("token") String token) {
-        // ユーザの存在チェック・トークンチェック
+        // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 年度取得 ok
@@ -45,7 +45,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}")
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<String> getLectures(@PathParam("uid") String uid, @PathParam("year") int year, @QueryParam("token") String token) {
-        // ユーザの存在チェック・トークンチェック
+        // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 授業ID一覧の取得・年度の存在確認 ok
@@ -66,7 +66,7 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addYear(@PathParam("uid") String uid, @PathParam("year") int year, @FormParam("token") String token) {
-        // ユーザの存在チェック・トークンチェック
+        // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 年度追加 ok
@@ -79,7 +79,7 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
-        // ユーザの存在チェック・トークンチェック
+        // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 授業の存在チェック ok
@@ -101,7 +101,7 @@ public class UserTimetableResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void removeYear(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
-        // ユーザの存在チェック・トークンチェック
+        // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 授業の存在チェック ok
