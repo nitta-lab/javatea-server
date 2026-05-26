@@ -184,7 +184,7 @@ public class UserResource {
             );
         }
 
-//        userRepository.deleteToken(uid);
+        userRepository.deleteToken(uid);
     }
 
 
