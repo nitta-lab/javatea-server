@@ -15,5 +15,8 @@ public class TestCategoryRepository {
 
 
         CategoryRepository categoryRepository = new CategoryRepository();
+        categoryRepository.createUniversity("甲南大学","コウナンダイガク");
+
+
     }
 }
