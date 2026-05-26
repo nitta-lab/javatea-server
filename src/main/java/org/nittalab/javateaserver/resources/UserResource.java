@@ -120,14 +120,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
 
-        // 400 不正なリクエスト(uid, pw 必須)
-        if (uid == null || uid.isBlank()) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.BAD_REQUEST)
-                            .entity("uid は必須です")
-                            .build());
-        }
-
+        // 400 不正なリクエスト(pw 必須)
         if (pw == null || pw.isBlank()) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST)
