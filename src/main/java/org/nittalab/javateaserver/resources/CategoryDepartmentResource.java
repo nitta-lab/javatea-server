@@ -139,6 +139,7 @@ public class CategoryDepartmentResource {
     @PUT //学科特有の各授業の質問IDの一覧取得
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response addLecture(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName, @PathParam("lecture-id") String lectureId) {
+        //400 bad request
         if (univId == null || facultyName == null || departmentName == null || lectureId == null || univId.isEmpty() || facultyName.isEmpty() || departmentName.isEmpty() || lectureId.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
