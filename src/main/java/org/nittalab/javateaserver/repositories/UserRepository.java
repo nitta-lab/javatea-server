@@ -12,8 +12,8 @@ public class UserRepository {
 
     //test用(起動時にユーザ登録)
     public UserRepository(){
-        User user0 = createUser("test01", "testUser01", "testpass01");
-        userMap.put(user0.getUid(), user0);
+        User user01 = createUser("test01", "testUser01", "testPass01");
+        user01.setToken("testToken01");
     }
 
     //Userクラスの作成
@@ -28,7 +28,7 @@ public class UserRepository {
         return userMap.get(uid);
     }
 
-    //Userが存在するかを返す(存在しない場合false)
+    //Userが重複していないかを調べる(重複している場合True)
     public boolean checkDuplicate(String uid){
         return userMap.containsKey(uid);
     }
@@ -37,5 +37,10 @@ public class UserRepository {
     public String createToken(String uid){
         userMap.get(uid).setToken(UUID.randomUUID().toString());
         return userMap.get(uid).getToken();
+    }
+
+    //Tokenの削除
+    public void deleteToken(String uid){
+        userMap.get(uid).setToken(null);
     }
 }
