@@ -11,11 +11,24 @@ public class CategoryRepository {
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
 
     private HashMap<String, University> universities =  new HashMap<>();
-
+    private record universitiesRecord(String name,String kana){}
+    HashMap<universitiesRecord,String> universitiesRecords = new HashMap<>();
     public University createUniversity(String name, String kana) {
         int size = universities.size()+1;
-        universities.put("univ-id"+size,new University("univ-id"+size, name, kana)); //universityに大学が追加される。putは追加
-        return universities.get("univ-id"+size); //getは取得。(Pythonのd[key])
+        //全角カタカナでなければ、nullを返す。
+        for(int i=0;i<kana.length();i++){
+            if(!(kana.charAt(i) >= 0x30a1 && kana.charAt(i) <= 0x30ff)){
+                return null;
+            }
+        }
+        //大学名と読み仮名の同じものが存在したときは、その大学を返す。
+        if(universitiesRecords.containsKey(new universitiesRecord(name,kana))){
+            return getUniversity(universitiesRecords.get(new universitiesRecord(name,kana)));
+        }
+        String univ_id = "univ-id" + size;
+        universities.put(univ_id,new University(univ_id, name, kana)); //universityに大学が追加される。putは追加
+        universitiesRecords.put(new universitiesRecord(name,kana),univ_id);
+        return universities.get(univ_id); //getは取得。(Pythonのd[key])
     }
 
     public University getUniversity(String univ_id) {
