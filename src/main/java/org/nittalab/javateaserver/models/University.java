@@ -47,6 +47,10 @@ public class University {
 
     //学部を作成
     public Faculty createFaculty(String faculty_name) {
+        //学部が重複していたら、その学部を返す。
+        if (this.faculties.containsKey(faculty_name)){
+            return this.faculties.get(faculty_name);
+        }
         faculties.put(faculty_name, new Faculty(faculty_name));
         return faculties.get(faculty_name);
     }
