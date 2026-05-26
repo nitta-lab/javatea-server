@@ -11,13 +11,14 @@ import org.nittalab.javateaserver.repositories.CategoryRepository;
 import org.nittalab.javateaserver.repositories.LectureRepository;
 
 import org.nittalab.javateaserver.models.Faculty;
+import org.nittalab.javateaserver.models.Lecture;
 
 import java.util.ArrayList;
 
 
 @Path("/category-faculty")
 @Component
-public class CategoryFacultyResource{
+public class CategoryFacultyResource {
 
     private LectureRepository lectureRepository = null;
     private CategoryRepository categoryRepository = null;
@@ -33,24 +34,24 @@ public class CategoryFacultyResource{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response getFaculty(@PathParam("univ-id")String univId){
+    public ArrayList<String> getFaculty(@PathParam("univ-id") String univId) {
 
         //400不正リクエスト
-        if(univId == null || univId.isEmpty()){
+        if (univId == null || univId.isEmpty()) {
             var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
             throw new WebApplicationException(response.build());
         }
 
-        ArrayList<String>faculty = CategoryRepository.get(univId);
+        ArrayList<String> faculty = categoryRepository.getFaculties(univId);
 
         //404データが存在しない
-        if(faculty == null){
+        if (faculty == null) {
             var response = Response.status(Response.Status.NOT_FOUND).entity("データが存在しません");
             throw new WebApplicationException(response.build());
         }
 
         //200成功
-        return Response.status(Response.Status.OK).build();
+        return faculty;
 
         //500予期せぬエラー
         //springbootが返してくれるためコード無し
@@ -61,29 +62,30 @@ public class CategoryFacultyResource{
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response addFaculty(@PathParam("univ-id")String univId,
-                               @PathParam("faculty-name")String facultyName){
+    public void addFaculty(@PathParam("univ-id") String univId,
+                           @PathParam("faculty-name") String facultyName) {
 
         //400不正リクエスト
-        if(univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()){
+        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
             var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
             throw new WebApplicationException(response.build());
         }
 
         //404データが存在しない(大学が存在しない場合)
-        if(CategoryRepository.get(univId) == null){
-            var response = Response.status(Response.Status.NOT_FOUND).entity("データが存在しません");
+        if (categoryRepository.getUniversities(univId) == null) {
+            var response = Response.status(Response.Status.NOT_FOUND).entity("大学が存在しません");
             throw new WebApplicationException(response.build());
 
         }
 
-        Faculty faculty = CategoryRepository.addFaculty(univId, facultyName);
+        Faculty faculty = categoryRepository.createFaculty(facultyName);
 
         //404データが存在しない
+        if (faculty == null) {
+            var response = Response.status(Response.Status.NOT_FOUND).entity("追加出来ません");
+            throw new WebApplicationException(response.build());
+        }
 
-
-        //200成功
-        return Response.status(Response.Status.OK).build();
     }
 
     //科目一覧取得
@@ -91,25 +93,25 @@ public class CategoryFacultyResource{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response getLectures(@PathParam("univ-id")String univId,
-                               @PathParam("faculty-name")String facultyName){
+    public ArrayList<String> getLectures(@PathParam("univ-id") String univId,
+                                         @PathParam("faculty-name") String facultyName) {
 
         //400不正リクエスト
-        if(univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()){
+        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
             var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
             throw new WebApplicationException(response.build());
         }
 
-        ArrayList<String> lectures = CategoryRepository.getLectures(univId, facultyName);
+        ArrayList<String> lectures = categoryRepository.getLectures(univId, facultyName);
 
         //404データが存在しない
-        if(lectures == null){
+        if (lectures == null) {
             var response = Response.status(Response.Status.NOT_FOUND).entity("データが存在しません");
             throw new WebApplicationException(response.build());
         }
 
         //200成功
-        return Response.status(Response.Status.OK).build();
+        return lectures;
     }
 
 
@@ -118,41 +120,38 @@ public class CategoryFacultyResource{
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response addlecture(@PathParam("univ-id")String univId,
-                               @PathParam("faculty-name")String facultyName,
-                               @PathParam("lecture-id")String lectureId){
+    public void addlecture(@PathParam("univ-id") String univId,
+                           @PathParam("faculty-name") String facultyName,
+                           @PathParam("lecture-id") String lectureId) {
 
         //400不正なリクエスト
-        if(univId == null || univId.isEmpty() ||
+        if (univId == null || univId.isEmpty() ||
                 facultyName == null || facultyName.isEmpty() ||
-                lectureId == null ||  lectureId.isEmpty()){
+                lectureId == null || lectureId.isEmpty()) {
             var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
             throw new WebApplicationException(response.build());
         }
 
-        //404
+        //404データが存在しない(大学が存在しない)
+        if (categoryRepository.getUniversities()) {
+            var response = Response.status(Response.Status.NOT_FOUND).entity("大学が存在しません");
+            throw new WebApplicationException(response.build());
+        }
 
+        //404データが存在しない(学部が存在しない)
+        if (categoryRepository.get(facultyName) == null) {
+            var response = Response.status(Response.Status.NOT_FOUND).entity("学部が存在しません");
+            throw new WebApplicationException(response.build());
+        }
 
-        //200成功
-        return Response.status(Response.Status.OK).build();
+        Lecture lecture = categoryRepository.addLecture(lectureId,lectureRepository.getLecture(lectureId));
+
+        //404データが存在しない
+        if (lecture == null) {
+            var response = Response.status(Response.Status.NOT_FOUND).entity("データが存在しません");
+            throw new WebApplicationException(response.build());
+        }
+
 
     }
-
-    //質問一覧取得
-    @Path("/{univ-id}/faculties/{faculty-name}/lectures/{lecture-id}/questions")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-
-    public Response getQuestions(@PathParam("univ-id")String univId,
-                                 @PathParam("faculty-name")String facultyName,
-                                 @PathParam("lecture-id")String lectureId){
-
-
-
-        //200成功
-        return Response.status(Response.Status.OK).build();
-
-    }
-
-    //質問追加
 }
