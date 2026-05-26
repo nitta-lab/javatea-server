@@ -23,6 +23,9 @@ public class LectureRepository {
 
     //授業の取得
     public Lecture getLecture(String lectureId) {
+        if (!lectureMap.containsKey(lectureId)) {
+            return null;
+        }
         return lectureMap.get(lectureId);
     }
 

@@ -5,6 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import org.nittalab.javateaserver.models.FriendPair;
 //import org.nittalab.javateaserver.models.UserDTO;
+import org.nittalab.javateaserver.repositories.TimetableRepository;
 import org.nittalab.javateaserver.repositories.UserRepository;
 import org.nittalab.javateaserver.models.User;
 //import org.nittalab.javateaserver.services.FriendService;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Component;
 //import static io.micrometer.common.util.StringUtils.isBlank;
 //import java.util.ArrayList;
 
+import java.time.LocalDate;
+
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @Path("/users")
@@ -38,10 +41,13 @@ public class UserResource {
 //    }
 
     private final UserRepository userRepository;
+    private final TimetableRepository timetableRepository;
 
     @Autowired
-    public UserResource(UserRepository userRepository) { //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
+    public UserResource(UserRepository userRepository, TimetableRepository timetableRepository) {
+        //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
         this.userRepository = userRepository;
+        this.timetableRepository = timetableRepository;
     }
 
     //@Path("/{uid}/..")などパスを指定する
@@ -100,6 +106,7 @@ public class UserResource {
 //            );
 //        }
 
+        timetableRepository.createTimetable(uid, LocalDate.now().getYear());
         // 200 正常にユーザID登録、uid,name,pwはここで記憶される
         return userRepository.createUser(uid, name, pw);
     }
@@ -153,6 +160,32 @@ public class UserResource {
         return userRepository.createToken(uid);
     }
 
+    // ログアウト時にTokenをnullで上書きしてそのユーザーがTokenを持ってない状態に戻す
+    @PUT
+    @Path("{uid}/login")
+    @Produces(MediaType.TEXT_PLAIN)
+    public void deleteToken(@PathParam("uid") String uid, @QueryParam("token") String token) {
+        User user = userRepository.getUser(uid);
+
+        // 404 ユーザが存在しません
+        //存在チェック
+        if (user == null) {
+            throw new WebApplicationException(
+                    Response.Status.NOT_FOUND
+            );
+        }
+
+        // 401 認証エラー
+        if (token == null || !token.equals(user.getToken())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.FORBIDDEN)
+                            .entity("認証失敗")
+                            .build()
+            );
+        }
+
+        userRepository.deleteToken(uid);
+    }
 
 
     //ユーザの大学の取得
