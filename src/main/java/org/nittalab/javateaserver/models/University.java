@@ -30,9 +30,19 @@ public class University {
         return name;
     }
 
-    //kada(大学の読み仮名)の取得
+    //name(大学の名前)の変更
+    public void setName(String name){
+        this.name = name;
+    }
+
+    //kana(大学の読み仮名)の取得
     public String getKana() {
         return kana;
+    }
+
+    //kana(大学の読み仮名)の変更
+    public void setKana(String kana) {
+        this.kana = kana;
     }
 
     //学部を作成
@@ -67,8 +77,8 @@ public class University {
         return lectures.get(lecture_id);
     }
 
-    //大学全般科目の一覧取得(idのみ)
-    public Set<String> getLectures() {
-        return lectures.keySet();
+    //大学全般科目の一覧取得
+    public HashMap<String,Lecture> getLectures() {
+        return lectures;
     }
 }
