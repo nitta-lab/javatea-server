@@ -5,6 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import org.nittalab.javateaserver.models.FriendPair;
 //import org.nittalab.javateaserver.models.UserDTO;
+import org.nittalab.javateaserver.repositories.TimetableRepository;
 import org.nittalab.javateaserver.repositories.UserRepository;
 import org.nittalab.javateaserver.models.User;
 //import org.nittalab.javateaserver.services.FriendService;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Component;
 //import static io.micrometer.common.util.StringUtils.isBlank;
 //import java.util.ArrayList;
 
+import java.time.LocalDate;
+
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @Path("/users")
@@ -38,10 +41,13 @@ public class UserResource {
 //    }
 
     private final UserRepository userRepository;
+    private final TimetableRepository timetableRepository;
 
     @Autowired
-    public UserResource(UserRepository userRepository) { //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
+    public UserResource(UserRepository userRepository, TimetableRepository timetableRepository) {
+        //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
         this.userRepository = userRepository;
+        this.timetableRepository = timetableRepository;
     }
 
     //@Path("/{uid}/..")などパスを指定する
@@ -100,6 +106,7 @@ public class UserResource {
 //            );
 //        }
 
+        timetableRepository.createTimetable(uid, LocalDate.now().getYear());
         // 200 正常にユーザID登録、uid,name,pwはここで記憶される
         return userRepository.createUser(uid, name, pw);
     }
