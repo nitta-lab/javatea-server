@@ -12,8 +12,8 @@ public class UserRepository {
 
     //test用(起動時にユーザ登録)
     public UserRepository(){
-        User user01 = createUser("test01", "testUser01", "testpass01");
-        createToken("test01");
+        User user01 = createUser("test01", "testUser01", "testPass01");
+        user01.setToken("testToken01");
     }
 
     //Userクラスの作成
