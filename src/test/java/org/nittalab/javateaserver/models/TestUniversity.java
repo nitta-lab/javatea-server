@@ -95,5 +95,39 @@ public class TestUniversity {
         assertEquals(departments.get(1), faculty.getDepartment("B学部"));
         assertEquals(departments.get(2), faculty.getDepartment("C学部"));
         assertNull(faculty.getDepartment("D学科")); //存在しない学部を叩いた際の確認
+
+        //科目の追加、取得
+        HashMap<String, Lecture> lectures = new HashMap<>();
+        faculty.addLecture("L_001", new Lecture("授業A",1, "前期", 1,"月", 1));
+        faculty.addLecture("L_002", new Lecture("授業B",1, "前期", 1,"月", 1));
+        faculty.addLecture("L_003", new Lecture("授業C",1, "前期", 1,"月", 1));
+        lectures.put("L_001", faculty.getLecture("L_001"));
+        lectures.put("L_002", faculty.getLecture("L_002"));
+        lectures.put("L_003", faculty.getLecture("L_003"));
+        assertEquals(3, lectures.size()); //サイズでの確認
+        assertEquals(lectures, faculty.getLectures()); //リストを取得できるかの確認
+
+        assertNull(faculty.getLecture("L_000")); //存在しないIDを叩いた場合の確認
+    }
+
+    @Test
+    void DepartmentTest() {
+        Department department = new Department("学科");
+
+        //学科名の取得
+        assertEquals("学科", department.getDepartmentName());
+
+        //科目の追加、取得
+        HashMap<String, Lecture> lectures = new HashMap<>();
+        department.addLecture("L_001", new Lecture("授業A",1, "前期", 1,"月", 1));
+        department.addLecture("L_002", new Lecture("授業B",1, "前期", 1,"月", 1));
+        department.addLecture("L_003", new Lecture("授業C",1, "前期", 1,"月", 1));
+        lectures.put("L_001", department.getLecture("L_001"));
+        lectures.put("L_002", department.getLecture("L_002"));
+        lectures.put("L_003", department.getLecture("L_003"));
+        assertEquals(3, lectures.size()); //サイズでの確認
+        assertEquals(lectures, department.getLectures()); //リストを取得できるかの確認
+
+        assertNull(department.getLecture("L_000")); //存在しないIDを叩いた場合の確認
     }
 }
