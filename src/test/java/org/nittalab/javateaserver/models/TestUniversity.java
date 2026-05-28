@@ -84,16 +84,16 @@ public class TestUniversity {
         departments.add(faculty.createDepartment("B学科"));
         departments.add(faculty.createDepartment("C学科"));
         Set<String> departmentNamesExp = new HashSet<>();
-        departmentNamesExp.add("A学部");
-        departmentNamesExp.add("B学部");
-        departmentNamesExp.add("C学部");
+        departmentNamesExp.add("A学科");
+        departmentNamesExp.add("B学科");
+        departmentNamesExp.add("C学科");
         assertEquals(3, departments.size()); //サイズでの確認
         assertEquals(departmentNamesExp, faculty.getDepartments()); //学部名での確認
-        assertNull(university.createFaculty("A学部")); //重複時の動作確認
+        assertNull(faculty.createDepartment("A学科")); //重複時の動作確認
 
-        assertEquals(departments.get(0), university.getFaculty("A学部"));
-        assertEquals(departments.get(1), university.getFaculty("B学部"));
-        assertEquals(departments.get(2), university.getFaculty("C学部"));
-        assertNull(university.getFaculty("D学部")); //存在しない学部を叩いた際の確認
+        assertEquals(departments.get(0), faculty.getDepartment("A学部"));
+        assertEquals(departments.get(1), faculty.getDepartment("B学部"));
+        assertEquals(departments.get(2), faculty.getDepartment("C学部"));
+        assertNull(faculty.getDepartment("D学科")); //存在しない学部を叩いた際の確認
     }
 }
