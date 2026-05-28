@@ -55,7 +55,7 @@ public class CategoryDepartmentResource {
         spring bootが500を返してくれるからコードなし
          */
 
-        ArrayList<String> departmentNames = new ArrayList<>(faculty.getDepartments().keySet());
+        ArrayList<String> departmentNames = new ArrayList<>(faculty.getDepartments());
 
         //200 ok
         return Response.ok(departmentNames).build();
