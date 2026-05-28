@@ -20,8 +20,15 @@ public class Faculty {
     }
 
     //学部の作成、追加
-    public void createDepartment(String department_name){
+    public Department createDepartment(String department_name){
+
+        //学科が既に存在していた場合はnullを返す
+        if (departments.containsKey(department_name)){
+            return null;
+        }
+
         this.departments.put(department_name, new Department(department_name));
+        return departments.get(department_name);
     }
 
     //名称(ID)で指定された学部の取得(念のため)
