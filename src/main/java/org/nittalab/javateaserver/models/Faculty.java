@@ -1,6 +1,7 @@
 package org.nittalab.javateaserver.models;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Faculty {
     private String faculty_name; //学部の名称(ID代わり)
@@ -19,12 +20,19 @@ public class Faculty {
         return faculty_name;
     }
 
-    //学部の作成、追加
-    public void createDepartment(String department_name){
+    //学科の作成、追加
+    public Department createDepartment(String department_name){
+
+        //学科が既に存在していた場合はnullを返す
+        if (departments.containsKey(department_name)){
+            return null;
+        }
+
         this.departments.put(department_name, new Department(department_name));
+        return departments.get(department_name);
     }
 
-    //名称(ID)で指定された学部の取得(念のため)
+    //名称(ID)で指定された学科の取得(念のため)
     public Department getDepartment(String department_name){
         if (!departments.containsKey(department_name)){
             return null; //指定先がなければnullを返す
@@ -33,9 +41,9 @@ public class Faculty {
         return this.departments.get(department_name);
     }
 
-    //学部の一覧の取得
-    public HashMap <String, Department> getDepartments(){
-        return departments;
+    //学科の一覧の取得
+    public Set<String> getDepartments(){
+        return departments.keySet();
     }
 
     //学部全般科目の追加
