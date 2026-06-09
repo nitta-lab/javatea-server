@@ -42,7 +42,7 @@ public class Faculty {
     }
 
     //学科の一覧の取得
-    public Set<String> getDepartments(){
+    public Set<String> getDepartments() {
         return departments.keySet();
     }
 
