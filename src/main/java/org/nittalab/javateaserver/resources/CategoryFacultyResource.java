@@ -17,12 +17,12 @@ import org.nittalab.javateaserver.models.Lecture;
 import java.util.*;
 
 
-@Path("/category-faculty")
+@Path("/categories/universities")
 @Component
 public class CategoryFacultyResource {
 
-    private LectureRepository lectureRepository = null;
-    private CategoryRepository categoryRepository = null;
+    private final LectureRepository lectureRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public CategoryFacultyResource(LectureRepository lectureRepository, CategoryRepository categoryRepository) {
@@ -31,23 +31,30 @@ public class CategoryFacultyResource {
     }
 
     //学部一覧取得
-    @Path("/categories/universities/{univ-id}/faculties")
+    @Path("/{univ-id}/faculties")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
     public Set<String> getFaculty(@PathParam("univ-id") String univId) {
 
-        //400不正リクエスト
-        if (univId == null || univId.isEmpty()) {
-            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
-            throw new WebApplicationException(response.build());
-        }
+//        //400不正リクエスト
+//        if (univId == null || univId.isEmpty()) {
+//            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
+//            throw new WebApplicationException(response.build());
+//        }
 
         University university = categoryRepository.getUniversity(univId);
-        Set<String> faculties = university.getFaculties();
+        // 404 指定された大学IDが存在しません
+        if (university == null) {
+
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
 
         //200成功
-        return faculties;
+        return university.getFaculties();
 
         //500予期せぬエラー
         //springbootが返してくれるためコード無し
@@ -61,22 +68,37 @@ public class CategoryFacultyResource {
     public void addFaculty(@PathParam("univ-id") String univId,
                            @PathParam("faculty-name") String facultyName) {
 
-        //400不正リクエスト
-        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
-            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
-            throw new WebApplicationException(response.build());
-        }
+//        //400不正リクエスト
+//        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
+//            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
+//            throw new WebApplicationException(response.build());
+//        }
 
-        //404データが存在しない(大学が存在しない場合)
-        if (categoryRepository.getUniversity(univId) == null) {
-            var response = Response.status(Response.Status.NOT_FOUND).entity("大学が存在しません");
-            throw new WebApplicationException(response.build());
-
-        }
-
+//        //404データが存在しない(大学が存在しない場合)
+//        if (categoryRepository.getUniversity(univId) == null) {
+//            var response = Response.status(Response.Status.NOT_FOUND).entity("大学が存在しません");
+//            throw new WebApplicationException(response.build());
+//
+//        }
         University university = categoryRepository.getUniversity(univId);
-        Faculty faculty = university.createFaculty(facultyName);
+        // 404 指定された大学IDが存在しません
+        if (university == null) {
 
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+        Faculty faculty = university.createFaculty(facultyName);
+        // 404 指定された学部が存在しません
+        if (faculty == null) {
+
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学部が存在しません")
+                            .build());
+        }
 
     }
 
@@ -86,13 +108,13 @@ public class CategoryFacultyResource {
     @Produces(MediaType.TEXT_PLAIN)
 
     public Set<String> getLectures(@PathParam("univ-id") String univId,
-                                         @PathParam("faculty-name") String facultyName) {
+                                   @PathParam("faculty-name") String facultyName) {
 
-        //400不正リクエスト
-        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
-            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
-            throw new WebApplicationException(response.build());
-        }
+//        //400不正リクエスト
+//        if (univId == null || univId.isEmpty() || facultyName == null || facultyName.isEmpty()) {
+//            var response = Response.status(Response.Status.BAD_REQUEST).entity("不正なリクエスト");
+//            throw new WebApplicationException(response.build());
+//        }
 
         //404データが存在しない(大学が存在しない)
         if (categoryRepository.getUniversity(univId) == null) {
@@ -122,7 +144,7 @@ public class CategoryFacultyResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
 
-    public void addlecture(@PathParam("univ-id") String univId,
+    public void addLecture(@PathParam("univ-id") String univId,
                            @PathParam("faculty-name") String facultyName,
                            @PathParam("lecture-id") String lectureId) {
 
