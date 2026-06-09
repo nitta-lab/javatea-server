@@ -10,7 +10,7 @@ public class CategoryRepository {
     //getは取ってくる(変更はなし)、setは設定(まるごと入れ替え)、putは一部書き換え,removeは削除
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
 
-    private HashMap<String, University> universities =  new HashMap<>();
+    private TreeMap<String, University> universities =  new TreeMap<>();
     private record universitiesRecord(String name,String kana){}
     HashMap<universitiesRecord,String> universitiesRecords = new HashMap<>();
     public University createUniversity(String name, String kana) {
@@ -39,7 +39,11 @@ public class CategoryRepository {
     }
 
     //大学一覧を取得
-    public HashMap<String, University> getUniversities() {
+    public SortedMap<String, University> getUniversities() {
         return universities;
+    }
+
+    public SortedMap<String, University> getUniversitiesByKana(String from, String to) {
+        return universities.subMap(from,to);
     }
 }
