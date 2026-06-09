@@ -27,7 +27,7 @@ public class TestUniversity {
 
         //大学情報の変更
         university.setName("医科大学");
-        String univNameRenamed = university.getKana();
+        String univNameRenamed = university.getName();
         assertEquals("医科大学", univNameRenamed);
         university.setKana("イカダイガク");
         String univKanaRenamed = university.getKana();
@@ -83,17 +83,17 @@ public class TestUniversity {
         departments.add(faculty.createDepartment("A学科"));
         departments.add(faculty.createDepartment("B学科"));
         departments.add(faculty.createDepartment("C学科"));
-        Set<String> departmentNamesExp = new HashSet<>();
-        departmentNamesExp.add("A学科");
-        departmentNamesExp.add("B学科");
-        departmentNamesExp.add("C学科");
+        Set<String> DepartmentNamesExp = new HashSet<>();
+        DepartmentNamesExp.add("A学科");
+        DepartmentNamesExp.add("B学科");
+        DepartmentNamesExp.add("C学科");
         assertEquals(3, departments.size()); //サイズでの確認
-        assertEquals(departmentNamesExp, faculty.getDepartments()); //学部名での確認
+        assertEquals(DepartmentNamesExp, faculty.getDepartments()); //学部名での確認
         assertNull(faculty.createDepartment("A学科")); //重複時の動作確認
 
-        assertEquals(departments.get(0), faculty.getDepartment("A学部"));
-        assertEquals(departments.get(1), faculty.getDepartment("B学部"));
-        assertEquals(departments.get(2), faculty.getDepartment("C学部"));
+        assertEquals(departments.get(0), faculty.getDepartment("A学科"));
+        assertEquals(departments.get(1), faculty.getDepartment("B学科"));
+        assertEquals(departments.get(2), faculty.getDepartment("C学科"));
         assertNull(faculty.getDepartment("D学科")); //存在しない学部を叩いた際の確認
 
         //科目の追加、取得
