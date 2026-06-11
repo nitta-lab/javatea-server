@@ -31,9 +31,15 @@ public class TimetableRepository {
         }
     }
 
-    //ユーザが時間割登録をした年度一覧を取得する
-    public ArrayList<Integer> getYears(String uid) {
-        return new ArrayList<>(timetableMap.get(uid).keySet());
+    //ユーザが時間割登録をした年度一覧と授業一覧を取得する
+    public TreeMap<Integer,ArrayList<String>> getTimetable(String uid) {
+        TreeMap<Integer,ArrayList<String>> userTimetable = new TreeMap<>();
+
+        for(int year : timetableMap.get(uid).keySet()){
+            userTimetable.put(year,timetableMap.get(uid).get(year).getLectureIds());
+        }
+
+        return userTimetable;
     }
 
     //ユーザが時間割登録をした年度に登録した授業すべてを取得する

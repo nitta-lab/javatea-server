@@ -39,7 +39,7 @@ public class CategoryUniversityResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<University> getAllUnivId(@QueryParam("from") String from, @QueryParam("to") String to) {
 
-        if (from != null && to != null) {
+        if (from == null && to == null) {
             return categoryRepository.getUniversities().values();
         }
         //getAllIdで一覧取得
