@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -34,7 +35,7 @@ public class UserTimetableResource {
     @GET
     @Path("/{uid}/timetable")
     @Produces(MediaType.APPLICATION_JSON)
-    public TreeMap<Integer,ArrayList<String>> getTimetable(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public TreeMap<Integer, HashSet<String>> getTimetable(@PathParam("uid") String uid, @QueryParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
