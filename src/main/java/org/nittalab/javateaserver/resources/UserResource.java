@@ -120,14 +120,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
 
-        // 400 不正なリクエスト
-        if (uid == null || uid.isBlank()) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.BAD_REQUEST)
-                            .entity("uid は必須です")
-                            .build());
-        }
-
+        // 400 不正なリクエスト(pw 必須)
         if (pw == null || pw.isBlank()) {
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST)
@@ -135,7 +128,7 @@ public class UserResource {
                             .build());
         }
 
-        //存在チェック
+        //404 存在チェック
         User user = userRepository.getUser(uid);
         if (user == null) {
             throw new WebApplicationException(
@@ -145,7 +138,7 @@ public class UserResource {
             );
         }
 
-        //パスワードチェック 適切なステータスはなんですか？
+        // 401 パスワードチェック 適切なステータスはなんですか？
         if (!pw.equals(user.getPw())) {
             throw new WebApplicationException(
                     Response.status(Response.Status.UNAUTHORIZED)
@@ -164,14 +157,16 @@ public class UserResource {
     @PUT
     @Path("{uid}/login")
     @Produces(MediaType.TEXT_PLAIN)
-    public void deleteToken(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public void deleteToken(@PathParam("uid") String uid, @FormParam("token") String token) {
         User user = userRepository.getUser(uid);
 
         // 404 ユーザが存在しません
         //存在チェック
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
@@ -197,10 +192,11 @@ public class UserResource {
         User user = userRepository.getUser(uid);
 
         // 404 ユーザが存在しません
-        //存在チェック
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
@@ -225,7 +221,10 @@ public class UserResource {
 
         // 400 リクエスト方式が不正です
         if(university == null || university.isBlank()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("大学名を入力してください")
+                            .build());
         }
 
         User user = userRepository.getUser(uid);
@@ -263,7 +262,9 @@ public class UserResource {
         // 404 ユーザが存在しません
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
@@ -289,7 +290,10 @@ public class UserResource {
 
         // 400 リクエスト方式が不正
         if(faculty == null || faculty.isBlank()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("学部名を入力してください")
+                            .build());
         }
 
         // 404 ユーザが存在しません
@@ -328,7 +332,9 @@ public class UserResource {
         //存在チェック
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
@@ -355,7 +361,10 @@ public class UserResource {
 
         // 400 リクエスト方式が不正
         if(department == null || department.isBlank()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("学科名を入力してください")
+                            .build());
         }
 
         // 404 ユーザが存在しません
@@ -393,7 +402,9 @@ public class UserResource {
         //存在チェック
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
@@ -418,7 +429,10 @@ public class UserResource {
 
         // 400 リクエスト方式が不正
         if(grade == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("学年を入力してください")
+                            .build());
         }
 
         // 404 ユーザが存在しません
@@ -458,7 +472,9 @@ public class UserResource {
         //存在チェック
         if (user == null) {
             throw new WebApplicationException(
-                    Response.Status.NOT_FOUND
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
             );
         }
 
