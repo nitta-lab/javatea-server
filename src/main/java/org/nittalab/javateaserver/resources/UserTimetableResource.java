@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Path("/users")
 @Component
@@ -32,12 +34,12 @@ public class UserTimetableResource {
     @GET
     @Path("/{uid}/timetable")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<Integer> getYears(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public TreeMap<Integer,ArrayList<String>> getTimetable(@PathParam("uid") String uid, @QueryParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 年度取得 ok
-        return timetableRepository.getYears(uid);
+        return timetableRepository.getTimetable(uid);
     }
 
     // 指定した年度に登録している授業ID(lecture-id)一覧を取得
@@ -100,7 +102,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}/{lecture-id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void removeYear(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+    public void removeLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
