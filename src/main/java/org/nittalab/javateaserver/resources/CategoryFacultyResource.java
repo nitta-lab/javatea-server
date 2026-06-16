@@ -33,7 +33,7 @@ public class CategoryFacultyResource {
     //学部一覧取得
     @Path("/{univ-id}/faculties")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
 
     public Set<String> getFaculty(@PathParam("univ-id") String univId) {
 
@@ -105,7 +105,7 @@ public class CategoryFacultyResource {
     //科目一覧取得
     @Path("/{univ-id}/faculties/{faculty-name}/lectures")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
 
     public Set<String> getLectures(@PathParam("univ-id") String univId,
                                    @PathParam("faculty-name") String facultyName) {

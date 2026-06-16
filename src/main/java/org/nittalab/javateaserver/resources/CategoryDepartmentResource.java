@@ -13,8 +13,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Set;
 
-@Path("/categories")
+@Path("/categories/universities")
 @Component
 
 public class CategoryDepartmentResource {
@@ -27,27 +28,32 @@ public class CategoryDepartmentResource {
         this.lectureRepository = lectureRepository;
     }
 
-    @Path("/universities/{univ-id}/faculties/{faculty-name}/departments")
+    @Path("/{univ-id}/faculties/{faculty-name}/departments")
     @GET //学科一覧取得
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDepartments(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName){
-        //400 bad request
-        if (univId == null || facultyName == null || univId.isEmpty() || facultyName.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+    public Set<String> getDepartments(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName){
         University university = categoryRepository.getUniversity(univId);
 
         //404 not found
         if (university == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build()
+            );
         }
+
+
 
         Faculty faculty = university.getFaculty(facultyName);
 
         //404 not found
         if (faculty == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                    .entity("指定された学部が存在しません")
+                    .build()
+            );
         }
 
         /*
@@ -55,33 +61,37 @@ public class CategoryDepartmentResource {
         spring bootが500を返してくれるからコードなし
          */
 
-        ArrayList<String> departmentNames = new ArrayList<>(faculty.getDepartments());
-
         //200 ok
-        return Response.ok(departmentNames).build();
+        return faculty.getDepartments();
     }
 
-    @Path("universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}")
+    @Path("/{univ-id}/faculties/{faculty-name}/departments/{department-name}")
     @PUT //学科追加
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response addDepartment(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName){
-        //400 bad request
-        if (univId == null || facultyName == null || departmentName == null || univId.isEmpty() || facultyName.isEmpty() || departmentName.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addDepartment(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName){
         University university = categoryRepository.getUniversity(univId);
 
         //404 not found
         if (university == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build()
+            );
         }
+
+
 
         Faculty faculty = university.getFaculty(facultyName);
 
-        //404 not found
-        if (faculty == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(faculty == null){
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学部が存在しません")
+                            .build()
+            );
         }
 
         /*
@@ -91,37 +101,46 @@ public class CategoryDepartmentResource {
 
         //200 ok
         faculty.createDepartment(departmentName);
-        return Response.status(Response.Status.OK).build();
     }
 
-    @Path("/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
+    @Path("/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
     @GET //各学科特有の授業追加
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLectures(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName) {
-        //400 bad request
-        if (univId == null || facultyName == null || departmentName == null || univId.isEmpty() || facultyName.isEmpty() || departmentName.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+    public Set<String> getLectures(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName) {
 
         University university = categoryRepository.getUniversity(univId);
 
         //404 not found
         if (university == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build()
+            );
         }
+
+
 
         Faculty faculty = university.getFaculty(facultyName);
 
-        //404 not found
-        if (faculty == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(faculty == null){
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学部が存在しません")
+                            .build()
+            );
         }
 
         Department department = faculty.getDepartment(departmentName);
 
         //404 not found
         if (department == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学科が存在しません")
+                            .build()
+            );
         }
 
         /*
@@ -129,40 +148,51 @@ public class CategoryDepartmentResource {
         spring bootが500を返してくれるからコードなし
          */
 
-        ArrayList<String> lectureIds = new ArrayList<>(department.getLectures().keySet());
+//        ArrayList<String> lectureIds = new ArrayList<>(department.getLectures().keySet());
 
         //200 ok
-        return Response.ok(lectureIds).build();
+        return department.getLectures().keySet();
+
     }
 
-    @Path("universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}")
+    @Path("/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}")
     @PUT //学科特有の各授業の質問IDの一覧取得
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response addLecture(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName, @PathParam("lecture-id") String lectureId) {
-        //400 bad request
-        if (univId == null || facultyName == null || departmentName == null || lectureId == null || univId.isEmpty() || facultyName.isEmpty() || departmentName.isEmpty() || lectureId.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addLecture(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName, @PathParam("lecture-id") String lectureId) {
         University university = categoryRepository.getUniversity(univId);
 
         //404 not found
         if (university == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build()
+            );
         }
+
+
 
         Faculty faculty = university.getFaculty(facultyName);
 
-        //404 not found
-        if (faculty == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(faculty == null){
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学部が存在しません")
+                            .build()
+            );
         }
 
         Department department = faculty.getDepartment(departmentName);
 
         //404 not found
         if (department == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された学科が存在しません")
+                            .build()
+            );
         }
 
         /*
@@ -171,9 +201,15 @@ public class CategoryDepartmentResource {
          */
 
         Lecture lecture = lectureRepository.getLecture(lectureId);
+        if(lecture == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された授業が存在しません")
+                            .build()
+            );
+        }
 
         //200 ok
         department.addLecture(lectureId, lecture);
-        return Response.status(Response.Status.OK).build();
     }
 }
