@@ -107,7 +107,7 @@ public class CategoryFacultyResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
 
-    public Set<String> getLectures(@PathParam("univ-id") String univId,
+    public Collection<Lecture> getLectures(@PathParam("univ-id") String univId,
                                    @PathParam("faculty-name") String facultyName) {
 
 //        //400不正リクエスト
@@ -135,7 +135,7 @@ public class CategoryFacultyResource {
 
 
         //200成功
-        return lectures.keySet();
+        return lectures.values();
     }
 
 
