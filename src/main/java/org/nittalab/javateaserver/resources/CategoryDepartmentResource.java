@@ -13,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Path("/categories")
 @Component
@@ -129,7 +130,9 @@ public class CategoryDepartmentResource {
         spring bootが500を返してくれるからコードなし
          */
 
-        ArrayList<String> lectureIds = new ArrayList<>(department.getLectures().keySet());
+        Collection<Lecture> lectureIds = new ArrayList<>(department.getLectures().values());
+        {
+        };
 
         //200 ok
         return Response.ok(lectureIds).build();

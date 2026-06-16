@@ -154,7 +154,7 @@ public class CategoryUniversityResource {
     @GET
     @Path("/{univ-id}/lectures")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<String> getUnivLectures(@PathParam("univ-id") String univId) {
+    public Collection<Lecture> getUnivLectures(@PathParam("univ-id") String univId) {
 
         University university =
                 categoryRepository.getUniversity(univId);
@@ -166,7 +166,7 @@ public class CategoryUniversityResource {
                             .build());
         }
 
-        return university.getLectures().keySet();
+        return university.getLectures().values();
     }
 
     //大学全般の質問の追加
