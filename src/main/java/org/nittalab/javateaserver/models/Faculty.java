@@ -38,7 +38,7 @@ public class Faculty {
             return null; //指定先がなければnullを返す
         }
 
-        return this.departments.get(department_name);
+        return departments.get(department_name);
     }
 
     //学科の一覧の取得
@@ -62,6 +62,6 @@ public class Faculty {
 
     //学部全般科目の一覧の取得
     public HashMap<String, Lecture> getLectures() {
-        return this.lecturesInFaculty;
+        return lecturesInFaculty;
     }
 }
