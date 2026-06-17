@@ -22,12 +22,12 @@ public class TestTimetableRepository {
         timetableRepository.createTimetable("002", 2025);
         timetableRepository.createTimetable("003", 2025);
         timetableRepository.createTimetable("004", 2025);
-        ArrayList<Integer> expectYears = new ArrayList<>();
+        HashSet<Integer> expectYears = new HashSet<>();
         expectYears.add(2025);
         expectYears.add(2026);
         expectYears.add(2027);
         System.out.println(expectYears);
-        assertEquals(timetableRepository.getYears("001"), expectYears);
+        assertEquals(timetableRepository.getTimetable("001").keySet(), expectYears);
 
         //授業の追加と確認のテスト
         timetableRepository.addLectureId("001", 2025, "001");
