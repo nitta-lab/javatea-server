@@ -17,7 +17,7 @@ public class LectureRepository {
         Set<String> keyList = lectureMap.keySet();
         int num = keyList.size() + 1;
         String lectureId = "Lecture-id" + num;
-        lectureMap.put(lectureId, new Lecture(name, grade, semester, frame, day, period));
+        lectureMap.put(lectureId, new Lecture(name, grade, semester, frame, day, period, lectureId));
         return lectureId;
     }
 

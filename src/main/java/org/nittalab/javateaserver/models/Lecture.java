@@ -8,14 +8,16 @@ public class Lecture {
     private int frame;
     private String day;
     private int period;
+    private String lectureId;
 
-    public Lecture(String name, int grade, String semester, int frame, String day, int period) {
+    public Lecture(String name, int grade, String semester, int frame, String day, int period, String lectureId) {
         this.name = name;
         this.grade = grade;
         this.semester = semester;
         this.frame = frame;
         this.day = day;
         this.period = period;
+        this.lectureId = lectureId;
     }
 
     public String getName() {
@@ -64,5 +66,13 @@ public class Lecture {
 
     public void setPeriod(int period) {
         this.period = period;
+    }
+
+    public String getLectureId() {
+        return lectureId;
+    }
+
+    public void setLectureId(String lectureId) {
+        this.lectureId = lectureId;
     }
 }
