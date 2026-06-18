@@ -89,7 +89,7 @@ public class UserTimetableResource {
         checkLecture(lectureId);
 
         // 授業ID追加 ok
-        if (!timetableRepository.addLectureId(uid, year, lectureId)) {
+        if (!timetableRepository.addLectureId(uid, year, lectureId, lectureRepository.getLecture(lectureId))) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)
                             .entity("404 年度が存在しません")

@@ -1,5 +1,6 @@
 package org.nittalab.javateaserver.repositories;
 
+import org.nittalab.javateaserver.models.Lecture;
 import org.nittalab.javateaserver.models.Timetable;
 import org.springframework.stereotype.Repository;
 import java.util.*;
@@ -57,12 +58,12 @@ public class TimetableRepository {
     //時間割に授業を追加
     //追加に成功したらtrue
     //年度が存在しなければ false
-    public boolean addLectureId(String uid, int year, String lectureId) {
+    public boolean addLectureId(String uid, int year, String lectureId, Lecture lecture) {
         Timetable timetable = getTimetableMap(uid, year);
         if (timetable == null) {
             return false;
         }
-        timetable.addLectureId(lectureId);
+        timetable.addLectureId(lectureId,lecture);
         return true;
     }
 
