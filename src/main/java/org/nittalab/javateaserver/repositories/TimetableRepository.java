@@ -33,13 +33,13 @@ public class TimetableRepository {
     }
 
     //ユーザが時間割登録をした年度一覧と授業一覧を取得する
-    public TreeMap<Integer,HashSet<String>> getTimetable(String uid) {
-        TreeMap<Integer,HashSet<String>> userTimetable = new TreeMap<>();
+    public TreeMap<Integer,HashSet<Lecture>> getTimetable(String uid) {
+        TreeMap<Integer,HashSet<Lecture>> userTimetable = new TreeMap<>();
         if(!timetableMap.containsKey(uid)){
             timetableMap.put(uid,new TreeMap<>());
         }
         for(int year : timetableMap.get(uid).keySet()){
-            userTimetable.put(year,new HashSet<>(timetableMap.get(uid).get(year).getLectureIds()));
+            userTimetable.put(year,new HashSet<>(timetableMap.get(uid).get(year).getLectures()));
         }
 
         return userTimetable;
@@ -47,12 +47,12 @@ public class TimetableRepository {
 
     //ユーザが時間割登録をした年度に登録した授業すべてを取得する
     //年度が存在しなければnullを返す
-    public ArrayList<String> getLectureIds(String uid, int year) {
+    public ArrayList<Lecture> getLectures(String uid, int year) {
         Timetable timetable = getTimetableMap(uid, year);
         if (timetable == null) {
             return null;
         }
-        return timetable.getLectureIds();
+        return timetable.getLectures();
     }
 
     //時間割に授業を追加

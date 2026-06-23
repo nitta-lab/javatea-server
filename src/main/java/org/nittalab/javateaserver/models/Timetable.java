@@ -31,8 +31,8 @@ public class Timetable {
         return uid;
     }
 
-    public ArrayList<String> getLectureIds() {
-        return new ArrayList<>(lectureIds.keySet());
+    public ArrayList<Lecture> getLectures() {
+        return new ArrayList<>(lectureIds.values());
     }
 
     public void addLectureId(String lectureId,Lecture lecture) {
@@ -71,7 +71,7 @@ public class Timetable {
                 //現在登録されていた授業の情報
                 String curSemester = lectureIds.get(curLecture).getSemester();
                 int curFrame = lectureIds.get(curLecture).getFrame();
-                String curDay = lectureIds.get(curLecture).getDay();;
+                String curDay = lectureIds.get(curLecture).getDay();
                 int curPeriod = lectureIds.get(curLecture).getPeriod();
                 //その授業をすべて削除
                 if(curSemester.equals("通年")){
@@ -98,7 +98,7 @@ public class Timetable {
         //現在登録されていた授業の情報
         String curSemester = lectureIds.get(curLecture).getSemester();
         int curFrame = lectureIds.get(curLecture).getFrame();
-        String curDay = lectureIds.get(curLecture).getDay();;
+        String curDay = lectureIds.get(curLecture).getDay();
         int curPeriod = lectureIds.get(curLecture).getPeriod();
         //その授業をすべて削除
         if(curSemester.equals("通年")){
