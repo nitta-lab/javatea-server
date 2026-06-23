@@ -1,11 +1,25 @@
 package org.nittalab.javateaserver.repositories;
 //完成
 import org.nittalab.javateaserver.models.University;
+import org.nittalab.javateaserver.models.Faculty;
+import org.nittalab.javateaserver.models.Department;
+import org.nittalab.javateaserver.models.Lecture;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
 public class CategoryRepository {
+
+    // test用(起動時にユーザ登録)
+    public CategoryRepository() {
+        University university1 = createUniversity("甲南大学", "コウナンダイガク");
+        Faculty faculty1 = university1.createFaculty("知能情報学部");
+        Department department1 = faculty1.createDepartment("知能情報学科");
+        university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2));
+        faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2));
+        department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2));
+    }
+
     //関数は動詞名詞
     //getは取ってくる(変更はなし)、setは設定(まるごと入れ替え)、putは一部書き換え,removeは削除
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
