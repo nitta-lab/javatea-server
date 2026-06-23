@@ -15,9 +15,9 @@ public class CategoryRepository {
         University university1 = createUniversity("甲南大学", "コウナンダイガク");
         Faculty faculty1 = university1.createFaculty("知能情報学部");
         Department department1 = faculty1.createDepartment("知能情報学科");
-        university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2));
-        faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2));
-        department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2));
+        university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1"));
+        faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2"));
+        department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3"));
     }
 
     //関数は動詞名詞
