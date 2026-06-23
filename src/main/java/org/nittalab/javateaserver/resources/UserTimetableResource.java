@@ -1,5 +1,6 @@
 package org.nittalab.javateaserver.resources;
 
+import org.nittalab.javateaserver.models.Lecture;
 import org.nittalab.javateaserver.models.User;
 import org.nittalab.javateaserver.repositories.LectureRepository;
 import org.nittalab.javateaserver.repositories.TimetableRepository;
@@ -35,7 +36,7 @@ public class UserTimetableResource {
     @GET
     @Path("/{uid}/timetable")
     @Produces(MediaType.APPLICATION_JSON)
-    public TreeMap<Integer, HashSet<String>> getTimetable(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public TreeMap<Integer, HashSet<Lecture>> getTimetable(@PathParam("uid") String uid, @QueryParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
@@ -47,12 +48,12 @@ public class UserTimetableResource {
     @GET
     @Path("/{uid}/timetable/{year}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<String> getLectures(@PathParam("uid") String uid, @PathParam("year") int year, @QueryParam("token") String token) {
+    public ArrayList<Lecture> getLectures(@PathParam("uid") String uid, @PathParam("year") int year, @QueryParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
         // 授業ID一覧の取得・年度の存在確認 ok
-        ArrayList<String> lectures = timetableRepository.getLectureIds(uid, year);
+        ArrayList<Lecture> lectures = timetableRepository.getLectures(uid, year);
         if (lectures == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)
