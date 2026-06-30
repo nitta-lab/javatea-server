@@ -116,9 +116,9 @@ public class UserResource {
     //ログイン
     @POST
     @Path("/{uid}/login")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
+    public User login(@PathParam("uid") String uid, @FormParam("pw") String pw) {
 
         // 400 不正なリクエスト(pw 必須)
         if (pw == null || pw.isBlank()) {
@@ -147,10 +147,12 @@ public class UserResource {
             );
         }
 
-//        String token = userRepository.createToken(uid);
-//        user.setToken(token);
-        //200 トークン発行成功　tokenはここで記憶される
-        return userRepository.createToken(uid);
+        // トークン発行成功　tokenはここで記憶される
+        String token = userRepository.createToken(uid);
+        user.setToken(token);
+
+        // Userクラスを渡すのに成功
+        return user;
     }
 
     // ログアウト時にTokenをnullで上書きしてそのユーザーがTokenを持ってない状態に戻す

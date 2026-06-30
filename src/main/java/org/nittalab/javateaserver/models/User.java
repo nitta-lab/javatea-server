@@ -97,7 +97,6 @@ public class User {
     }
 
     //UserのTokenを返すメゾット(生成はUserRepository.java)
-    @JsonIgnore //getUserメゾットを実行した際に、出力されないようにする
     public String getToken(){
         return this.token;
     }
