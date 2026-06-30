@@ -12,15 +12,9 @@ import java.util.Set;
 
 @Repository
 public class LectureRepository {
-    // test用(起動時にユーザ登録)
-    public LectureRepository() {
-       createLecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2);
-       createLecture("ソフトウェア工学", 3, "前期", 1, "火", 2 );
-       createLecture("ロボティクス", 3, "前期", 1, "水", 2);
-
-    }
 
     private HashMap<String, Lecture> lectureMap = new HashMap<>();
+    // test用(起動時にユーザ登録)
     public LectureRepository(){
         createLecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2);
         createLecture("ソフトウェア工学", 3, "前期", 1, "火", 2);
