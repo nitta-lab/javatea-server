@@ -107,8 +107,11 @@ public class UserResource {
 //        }
 
         timetableRepository.createTimetable(uid, LocalDate.now().getYear());
+        User user1 = userRepository.createUser(uid, name, pw);
+        String token = userRepository.createToken(uid);
+        user1.setToken(token);
         // 200 正常にユーザID登録、uid,name,pwはここで記憶される
-        return userRepository.createUser(uid, name, pw);
+        return user1;
     }
 
 
