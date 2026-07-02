@@ -110,7 +110,7 @@ public class UserResource {
         User user1 = userRepository.createUser(uid, name, pw);
         String token = userRepository.createToken(uid);
         user1.setToken(token);
-        // 200 正常にユーザID登録、uid,name,pwはここで記憶される
+        // 200 正常にユーザID登録、uid,name,pw, tokenは保存される
         return user1;
     }
 
