@@ -1,5 +1,8 @@
 package org.nittalab.javateaserver.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Lecture {
 
     private String name;
@@ -9,6 +12,7 @@ public class Lecture {
     private String day;
     private int period;
     private String lectureId;
+    private Set<Question> questions;
 
     public Lecture(String name, int grade, String semester, int frame, String day, int period, String lectureId) {
         this.name = name;
@@ -18,6 +22,7 @@ public class Lecture {
         this.day = day;
         this.period = period;
         this.lectureId = lectureId;
+        this.questions = new HashSet<>();
     }
 
     public String getName() {
@@ -75,4 +80,8 @@ public class Lecture {
     public void setLectureId(String lectureId) {
         this.lectureId = lectureId;
     }
+
+    public Set<Question> getQuestions() {return questions;}
+
+    public void addQuestion(Question question) {questions.add(question);}
 }

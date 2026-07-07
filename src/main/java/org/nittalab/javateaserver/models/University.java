@@ -1,6 +1,7 @@
 package org.nittalab.javateaserver.models;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class University {
@@ -12,6 +13,8 @@ public class University {
     private String kana;
     private HashMap<String, Lecture> lectures = new HashMap<>();
     private HashMap<String, Faculty> faculties = new HashMap<>();//key:faculty_name, value:Facultyクラス
+    private Set<Question> questions = new HashSet<>();// 【学校生活】質問
+    private Set<Question> allQuestions = new HashSet<>();
 
     //コンストラクタ(初期化)
     public University(String univ_id, String name, String kana) { //クラス名と同じにする、初期化みたいなもの
@@ -85,4 +88,12 @@ public class University {
     public HashMap<String,Lecture> getLectures() {
         return lectures;
     }
+
+    public Set<Question> getQuestions() {return questions;}
+
+    public void addQuestion(Question question) {this.questions.add(question);}
+
+    public Set<Question> getAllQuestions() {return allQuestions;}
+
+    public void addAllQuestion(Question question) {this.allQuestions.add(question);}
 }
