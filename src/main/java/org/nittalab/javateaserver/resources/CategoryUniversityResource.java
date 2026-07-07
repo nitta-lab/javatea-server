@@ -5,9 +5,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.nittalab.javateaserver.models.Lecture;
+import org.nittalab.javateaserver.models.Question;
 import org.nittalab.javateaserver.models.University;
 import org.nittalab.javateaserver.repositories.CategoryRepository;
 import org.nittalab.javateaserver.repositories.LectureRepository;
+import org.nittalab.javateaserver.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,15 +26,40 @@ public class CategoryUniversityResource {
 
     private LectureRepository lectureRepository;
     private CategoryRepository categoryRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     public CategoryUniversityResource(
             LectureRepository lectureRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            QuestionRepository questionRepository) {
 
         this.lectureRepository = lectureRepository;
         this.categoryRepository = categoryRepository;
+        this.questionRepository = questionRepository;
     }
+
+    // パスの関係でうまくいかないやつ
+//    @Path("/general/quesitons")
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Set<Question> getGeneralQuestions() {
+//        return categoryRepository.getGeneralQuestions();
+//    }
+//
+//    @Path("/general/quesitons/{qid}")
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    public void addGeneralQuestion(@PathParam("qid") String qid) {
+//        Question question = questionRepository.getQuestion(qid);
+//        if(question == null) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.NOT_FOUND)
+//                            .entity("指定された質問IDが存在しません")
+//                            .build());
+//        }
+//        categoryRepository.addGeneralQuestion(question);
+//    }
 
     // 大学一覧の取得
     @GET
@@ -150,6 +177,46 @@ public class CategoryUniversityResource {
         university.setKana(kana);
     }
 
+    @GET
+    @Path("/{univ-id}/general/questions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getUniversityGeneralQuestions(@PathParam("univ-id") String univId) {
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+        return university.getQuestions();
+    }
+
+    @PUT
+    @Path("/{univ-id}/general/questions/{qid}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void setUniversityGeneralQuestions(@PathParam("univ-id") String univId,  @PathParam("qid") String qid) {
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+        // ここにqidが存在するか確認する
+        Question question = questionRepository.getQuestion(qid);
+        if(question == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された質問IDが存在しません")
+                            .build());
+        }
+        university.addQuestion(question);
+    }
+
     //大学全般に属する科目一覧（ID)の取得。
     @GET
     @Path("/{univ-id}/lectures")
@@ -197,6 +264,63 @@ public class CategoryUniversityResource {
         university.addLecture(lectId, lecture);
     }
 
+    @GET
+    @Path("/{univ-id}/lectures/{lecture-id}/questions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getUniversityLectureQuestions(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectureId) {
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+        Lecture lecture = lectureRepository.getLecture(lectureId);
+
+        if (lecture == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された授業IDが存在しません")
+                            .build());
+        }
+
+        return lecture.getQuestions();
+    }
+
+    @PUT
+    @Path("/{univ-id}/lectures/{lecture-id}/questions/{qid}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void setUniversityLectureQuestions(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectureId, @PathParam("qid") String qid) {
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+        Lecture lecture = lectureRepository.getLecture(lectureId);
+
+        if (lecture == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された授業IDが存在しません")
+                            .build());
+        }
+
+        // ここにqid確認を入れる
+        Question question = questionRepository.getQuestion(qid);
+        if(question == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された質問IDが存在しません")
+                            .build());
+        }
+        lecture.addQuestion(question);
+    }
 }
 
 

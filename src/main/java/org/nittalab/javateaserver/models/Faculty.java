@@ -1,18 +1,21 @@
 package org.nittalab.javateaserver.models;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Faculty {
     private String faculty_name; //学部の名称(ID代わり)
     private HashMap<String, Department> departments; //学科(学科の名称(ID), 学科)
     private HashMap<String, Lecture> lecturesInFaculty; //学部全般科目(ID, 授業科目)
+    private Set<Question> allQuestions;
 
     //コンストラクタ
     public Faculty(String faculty_name) {
         this.faculty_name = faculty_name;
         this.departments = new HashMap<>();
         this.lecturesInFaculty = new HashMap<>();
+        this.allQuestions = new HashSet<>();
     }
 
     //学部名(ID)を取得(念のため)
@@ -64,4 +67,8 @@ public class Faculty {
     public HashMap<String, Lecture> getLectures() {
         return lecturesInFaculty;
     }
+
+    public Set<Question> getAllQuestions() {return allQuestions;}
+
+    public void addAllQuestion(Question question) {this.allQuestions.add(question);}
 }
