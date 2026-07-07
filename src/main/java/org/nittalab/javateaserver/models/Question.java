@@ -67,4 +67,12 @@ public class Question {
     public void setResPermission(String resPermission) {
         this.resPermission = resPermission;
     }
+
+    public String getQid() {
+        return qid;
+    }
+
+    public void setQid(String qid) {
+        this.qid = qid;
+    }
 }
