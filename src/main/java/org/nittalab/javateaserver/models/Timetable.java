@@ -42,7 +42,7 @@ public class Timetable {
         int frame = lecture.getFrame();
         String day = lecture.getDay();
         int period = lecture.getPeriod();
-        if(day.equals("土曜日")||day.equals("日曜日")){
+        if(day.equals("土曜日")||day.equals("日曜日")||semester.equals("その他")){
             otherTimetable.add(lectureId);
             return;
         }
@@ -60,6 +60,9 @@ public class Timetable {
         }
     }
     private void changeTimetable(String lectureId,String semester,int frame,String day,int period){
+        if(semester.equals("その他")){
+            return;
+        }
         for(int i=0;i<frame;i++){
             //現在登録されていた授業
             String curLecture = timetable.get(semester).get(day).get(period+i);
@@ -97,6 +100,10 @@ public class Timetable {
         otherTimetable.remove(curLecture);
         //現在登録されていた授業の情報
         String curSemester = lectureIds.get(curLecture).getSemester();
+        if(curSemester.equals("その他")){
+            lectureIds.remove(curLecture);
+            return;
+        }
         int curFrame = lectureIds.get(curLecture).getFrame();
         String curDay = lectureIds.get(curLecture).getDay();
         int curPeriod = lectureIds.get(curLecture).getPeriod();

@@ -104,7 +104,7 @@ public class UserTimetableResource {
     @Path("/{uid}/timetable/{year}/{lecture-id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void removeLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @FormParam("token") String token) {
+    public void removeLecture(@PathParam("uid") String uid, @PathParam("year") int year, @PathParam("lecture-id") String lectureId, @QueryParam("token") String token) {
         // ユーザの存在チェック・トークンチェック ok
         checkUser(uid, token);
 
