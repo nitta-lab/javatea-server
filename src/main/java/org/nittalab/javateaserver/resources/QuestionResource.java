@@ -1,10 +1,10 @@
 package org.nittalab.javateaserver.resources;
 
-import org.nittalab.javateaserver.models.Question;
 import org.nittalab.javateaserver.models.User;
-import org.nittalab.javateaserver.repositories.QuestionRepository;
 import org.nittalab.javateaserver.repositories.UserRepository;
 import org.nittalab.javateaserver.util.PermissionChecker;
+import org.nittalab.javateaserver.models.Question;
+import org.nittalab.javateaserver.repositories.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
