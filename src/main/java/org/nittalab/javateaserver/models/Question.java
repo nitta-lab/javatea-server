@@ -9,14 +9,16 @@ public class Question {
     private List<String> tags;
     private String viewPermission;
     private String resPermission;
+    private String qid;
 
-    public Question(String tilte, String body, String uid, List<String> tags, String viewPermission, String resPermission) {
+    public Question(String tilte, String body, String uid, List<String> tags, String viewPermission, String resPermission, String qid) {
         this.title = tilte;
         this.body = body;
         this.uid = uid;
         this.tags = tags;
         this.viewPermission = viewPermission;
         this.resPermission = resPermission;
+        this.qid = qid;
     }
 
     public String getTitle() {

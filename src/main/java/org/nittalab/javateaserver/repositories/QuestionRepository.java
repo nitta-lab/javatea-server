@@ -17,7 +17,7 @@ public class QuestionRepository {
         Set<String> keyList = questionMap.keySet();
         int num = keyList.size() + 1;
         String qid = "qid" + num;
-        questionMap.put(qid, new Question(title, body, uid, tags, viewPermission, resPermission));
+        questionMap.put(qid, new Question(title, body, uid, tags, viewPermission, resPermission, qid));
         return qid;
     }
 
