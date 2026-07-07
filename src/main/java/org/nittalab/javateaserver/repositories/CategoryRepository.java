@@ -24,6 +24,8 @@ public class CategoryRepository {
     //getは取ってくる(変更はなし)、setは設定(まるごと入れ替え)、putは一部書き換え,removeは削除
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
 
+    private Set<String> generalQuestions = new HashSet<>();
+
     private TreeMap<String, University> universities =  new TreeMap<>();
     private record universitiesRecord(String name,String kana, char form, char to){}
     HashMap<universitiesRecord,String> universitiesRecords = new HashMap<>();
@@ -119,5 +121,15 @@ public class CategoryRepository {
 
         // 5. 仕分け終わった「ア行だけのリスト」を画面に送り返す
         return filteredMap;
+    }
+
+    // 【全般】の質問一覧
+    public Set<String> getGeneralQuestions() {
+        return generalQuestions;
+    }
+
+    // 【全般】の質問一覧
+    public void addGeneralQuestion(String question) {
+        generalQuestions.add(question);
     }
 }
