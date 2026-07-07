@@ -14,6 +14,23 @@ public class UserRepository {
     public UserRepository(){
         User user01 = createUser("test01", "testUser01", "testPass01");
         user01.setToken("testToken01");
+        user01.setUniversity("甲南大学");
+        user01.setFaculty("知能情報学部");
+
+        User user02 = createUser("test02", "testUser02", "testPass02");
+        user02.setToken("testToken02");
+        user02.setUniversity("神戸大学");
+        user02.setFaculty("工学部");
+
+        User user03 = createUser("test03", "testUser03", "testPass03");
+        user03.setToken("testToken03");
+        user03.setUniversity("甲南大学");
+        user03.setFaculty("経営学部");
+
+        User user04 = createUser("test04", "testUser04", "testPass04");
+        user04.setToken("testToken04");
+        user04.setUniversity("甲南大学");
+        user04.setFaculty("知能情報学部");
     }
 
     //Userクラスの作成
