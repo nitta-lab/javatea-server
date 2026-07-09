@@ -15,7 +15,7 @@ public class AnswerRepository {
         String aid = "aid" + size;
         HashMap<String, Answer> answer = new HashMap<>();
 
-        answer.put(aid, new Answer(qid, body, uid));
+        answer.put(aid, new Answer(aid, body, uid));
         answers.put(qid, answer);
 
         return answers.get(qid).get(aid);
