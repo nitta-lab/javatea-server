@@ -10,7 +10,7 @@ public class AnswerRepository {
 
     private HashMap<String, HashMap <String, Answer>> answers = new HashMap<>(); //(qid, (aid, answer))という入れ子構造
 
-    public Answer createAnswer(String qid, String body, String uid) {
+    public Answer createAnswer(String qid, String body, String uid) { //解答の作成
         int size = answers.size() + 1;
         String aid = "aid" + size;
         HashMap<String, Answer> answer = new HashMap<>();
@@ -21,7 +21,7 @@ public class AnswerRepository {
         return answers.get(qid).get(aid);
     }
 
-    public HashMap <String, Answer> getAnswers(String qid) {
+    public HashMap <String, Answer> getAnswers(String qid) { //質問に紐づく解答一覧を返す
         if (!answers.containsKey(qid)) {
             return null;
         }
@@ -29,7 +29,7 @@ public class AnswerRepository {
         return answers.get(qid);
     }
 
-    public Answer getAnswer(String qid, String aid) {
+    public Answer getAnswer(String qid, String aid) { //aidに紐づく解答単体を返す
         if (!answers.get(qid).containsKey(aid)) {
             return null;
         }
