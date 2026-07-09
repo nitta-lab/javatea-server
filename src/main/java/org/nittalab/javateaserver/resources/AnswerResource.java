@@ -32,11 +32,13 @@ public class AnswerResource {
     @Path("/{qid}/answers")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public ArrayList<Answer> getAnswers(@PathParam("qid") String qid,@QueryParam("uid") String uid,@QueryParam("token") String token){
+    public HashMap<String,Answer> getAnswers(@PathParam("qid") String qid,@QueryParam("uid") String uid,@QueryParam("token") String token){
         checkUser(uid, token);
+
         checkQuestion(qid);
-        //ArrayList<Answer> answers = answerRepository.getAnswers(qid);
-        //return answers;
+
+        //nullなら回答が一つも存在しない
+        return answerRepository.getAnswers(qid);
     }
 
     @POST
@@ -46,15 +48,25 @@ public class AnswerResource {
     public Answer createAnswer(@PathParam("qid") String qid,@FormParam("uid") String uid,@FormParam("body") String body,@FormParam("token") String token){
         checkUser(uid, token);
 
+        checkQuestion(qid);
+
         if(body == null){
             throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("404 質問が存在しません")
+                    Response.status(Response.Status.BAD_REQUEST)
+                            .entity("必要な情報が不足しています。")
                             .build()
             );
         }
-        //Answer newAnswer = answerRepository.createAnswer("qid");
-        //return newAnswer;
+        Answer newAnswer = answerRepository.createAnswer(qid, body, uid);
+        if(newAnswer == null){
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("回答の作成に失敗しました")
+                            .build()
+            );
+        }
+
+        return newAnswer;
     }
 
     @GET
@@ -63,8 +75,11 @@ public class AnswerResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Answer getAnswer(@PathParam("qid") String qid,@PathParam("aid") String aid,@QueryParam("uid") String uid,@QueryParam("token") String token){
         checkUser(uid, token);
+
         checkQuestion(qid);
-        //Answer answer = answerRepository.getAnswer(qid,aid);
+
+        //nullなら回答が存在しない
+        return answerRepository.getAnswer(qid,aid);
     }
 
     //userの存在確認とtokenCheck
