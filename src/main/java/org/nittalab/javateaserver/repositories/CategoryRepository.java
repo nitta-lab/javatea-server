@@ -1,9 +1,6 @@
 package org.nittalab.javateaserver.repositories;
 //完成
-import org.nittalab.javateaserver.models.University;
-import org.nittalab.javateaserver.models.Faculty;
-import org.nittalab.javateaserver.models.Department;
-import org.nittalab.javateaserver.models.Lecture;
+import org.nittalab.javateaserver.models.*;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
@@ -24,7 +21,7 @@ public class CategoryRepository {
     //getは取ってくる(変更はなし)、setは設定(まるごと入れ替え)、putは一部書き換え,removeは削除
     //addは引数に渡している場合、createは関数の中で新しく作ったものを追加する場合
 
-    private Set<String> generalQuestions = new HashSet<>();
+    private Set<Question> generalQuestions = new HashSet<>();
 
     private TreeMap<String, University> universities =  new TreeMap<>();
     private record universitiesRecord(String name,String kana, char form, char to){}
@@ -124,12 +121,12 @@ public class CategoryRepository {
     }
 
     // 【全般】の質問一覧
-    public Set<String> getGeneralQuestions() {
+    public Set<Question> getGeneralQuestions() {
         return generalQuestions;
     }
 
     // 【全般】の質問一覧
-    public void addGeneralQuestion(String question) {
+    public void addGeneralQuestion(Question question) {
         generalQuestions.add(question);
     }
 }
