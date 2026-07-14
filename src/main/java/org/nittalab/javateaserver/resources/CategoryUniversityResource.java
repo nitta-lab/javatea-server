@@ -196,7 +196,7 @@ public class CategoryUniversityResource {
     @PUT
     @Path("/{univ-id}/general/questions/{qid}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void setUniversityGeneralQuestions(@PathParam("univ-id") String univId,  @PathParam("qid") String qid) {
+    public void addUniversityGeneralQuestion(@PathParam("univ-id") String univId,  @PathParam("qid") String qid) {
         University university = categoryRepository.getUniversity(univId);
 
         if (university == null) {
@@ -215,6 +215,7 @@ public class CategoryUniversityResource {
                             .build());
         }
         university.addQuestion(question);
+        university.addAllQuestion(question);
     }
 
     //大学全般に属する科目一覧（ID)の取得。
@@ -292,7 +293,7 @@ public class CategoryUniversityResource {
     @PUT
     @Path("/{univ-id}/lectures/{lecture-id}/questions/{qid}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void setUniversityLectureQuestions(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectureId, @PathParam("qid") String qid) {
+    public void addUniversityLectureQuestion(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectureId, @PathParam("qid") String qid) {
         University university = categoryRepository.getUniversity(univId);
 
         if (university == null) {
@@ -320,6 +321,7 @@ public class CategoryUniversityResource {
                             .build());
         }
         lecture.addQuestion(question);
+        university.addAllQuestion(question);
     }
 }
 

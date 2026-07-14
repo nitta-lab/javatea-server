@@ -222,5 +222,7 @@ public class CategoryFacultyResource {
                             .build());
         }
         lecture.addQuestion(question);
+        university.addAllQuestion(question);
+        faculty.addAllQuestion(question);
     }
 }

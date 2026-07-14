@@ -276,6 +276,9 @@ public class CategoryDepartmentResource {
                             .build());
         }
         lecture.addQuestion(question);
+        university.addAllQuestion(question);
+        faculty.addAllQuestion(question);
+        department.addAllQuestion(question);
     }
 
 
@@ -297,30 +300,6 @@ public class CategoryDepartmentResource {
                             .build());
         }
         return university.getAllQuestions();
-    }
-
-    @PUT
-    @Path("/{univ-id}/all-questions/{qid}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addAllUniversityQuestion(@PathParam("univ-id") String univId,  @PathParam("qid") String qid) {
-        University university = categoryRepository.getUniversity(univId);
-
-        if (university == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された大学IDが存在しません")
-                            .build());
-        }
-
-        // ここにQID確認入れる
-        Question question = questionRepository.getQuestion(qid);
-        if(question == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された質問IDが存在しません")
-                            .build());
-        }
-        university.addAllQuestion(question);
     }
 
     @GET
@@ -345,39 +324,6 @@ public class CategoryDepartmentResource {
                             .build());
         }
         return faculty.getAllQuestions();
-    }
-
-    @PUT
-    @Path("/{univ-id}/faculties/{faculty-name}/all-questions/{qid}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addAllFacultyQuestion(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName,  @PathParam("qid") String qid) {
-        University university = categoryRepository.getUniversity(univId);
-
-        if (university == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された大学IDが存在しません")
-                            .build());
-        }
-
-        Faculty faculty =  university.getFaculty(facultyName);
-
-        if (faculty == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された学部が存在しません")
-                            .build());
-        }
-
-        // ここにQID確認
-        Question question = questionRepository.getQuestion(qid);
-        if(question == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された質問IDが存在しません")
-                            .build());
-        }
-        faculty.addAllQuestion(question);
     }
 
     @GET
@@ -412,47 +358,4 @@ public class CategoryDepartmentResource {
         }
         return department.getAllQuestions();
     }
-
-    @PUT
-    @Path("/{univ-id}/faculties/{faculty-name}/departments/{department-name}/all-questions/{qid}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addAllDepartmentQuestion(@PathParam("univ-id") String univId, @PathParam("faculty-name") String facultyName, @PathParam("department-name") String departmentName,  @PathParam("qid") String qid) {
-        University university = categoryRepository.getUniversity(univId);
-
-        if (university == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された大学IDが存在しません")
-                            .build());
-        }
-
-        Faculty faculty =  university.getFaculty(facultyName);
-
-        if (faculty == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された学部が存在しません")
-                            .build());
-        }
-
-        Department department =  faculty.getDepartment(departmentName);
-
-        if (department == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された学科が存在しません")
-                            .build());
-        }
-
-        //　ここにQID確認
-        Question question = questionRepository.getQuestion(qid);
-        if(question == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("指定された質問IDが存在しません")
-                            .build());
-        }
-        department.addAllQuestion(question);
-    }
-
 }
