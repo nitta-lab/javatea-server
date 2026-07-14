@@ -39,28 +39,6 @@ public class CategoryUniversityResource {
         this.questionRepository = questionRepository;
     }
 
-    // パスの関係でうまくいかないやつ
-//    @Path("/general/quesitons")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Set<Question> getGeneralQuestions() {
-//        return categoryRepository.getGeneralQuestions();
-//    }
-//
-//    @Path("/general/quesitons/{qid}")
-//    @PUT
-//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    public void addGeneralQuestion(@PathParam("qid") String qid) {
-//        Question question = questionRepository.getQuestion(qid);
-//        if(question == null) {
-//            throw new WebApplicationException(
-//                    Response.status(Response.Status.NOT_FOUND)
-//                            .entity("指定された質問IDが存在しません")
-//                            .build());
-//        }
-//        categoryRepository.addGeneralQuestion(question);
-//    }
-
     // 大学一覧の取得
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -242,8 +220,7 @@ public class CategoryUniversityResource {
     @Path("/{univ-id}/lectures/{lecture-id}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void putUnivLectures(@PathParam("univ-id") String univId, @PathParam("lecture-id") String lectId) {
-        University university =
-                categoryRepository.getUniversity(univId);
+        University university = categoryRepository.getUniversity(univId);
 
         if (university == null) {
             throw new WebApplicationException(
@@ -252,8 +229,7 @@ public class CategoryUniversityResource {
                             .build());
         }
 
-        Lecture lecture =
-                lectureRepository.getLecture(lectId);
+        Lecture lecture = lectureRepository.getLecture(lectId);
 
         if (lecture == null) {
             throw new WebApplicationException(
@@ -278,7 +254,7 @@ public class CategoryUniversityResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = university.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
@@ -303,7 +279,7 @@ public class CategoryUniversityResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = university.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
