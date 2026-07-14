@@ -15,6 +15,17 @@ public class CategoryRepository {
         university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1"));
         faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2"));
         department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3"));
+        university1.addQuestion(new Question("図書館の使い方について", "図書館の蔵書検索のパソコンの使い方を教えてください", "test01", new ArrayList<String>(List.of("甲南大学","図書館")), "だれでも", "だれでも", "qid1"));
+        university1.addQuestion(new Question("食堂のおすすめメニュー", "食堂の一番美味いやつを教えろください", "test01", new ArrayList<String>(List.of("甲南大学","食堂")), "だれでも", "だれでも", "qid2"));
+        Lecture lecture1 = university1.getLecture("Lecture-id1");
+        lecture1.addQuestion(new Question("オーバーライドとは", "オーバーライドって何ですか", "test04", new ArrayList<String>(List.of("オブジェクト指向")), "だれでも", "だれでも", "qid3"));
+        lecture1.addQuestion(new Question("継承とは", "継承って何ですか", "test04", new ArrayList<String>(List.of("オブジェクト指向")), "だれでも", "同じ学部", "qid4"));
+        Lecture lecture2 = faculty1.getLecture("Lecture-id2");
+        lecture2.addQuestion(new Question("クラス図の書き方", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ学部", "同じ学部", "qid5"));
+        lecture2.addQuestion(new Question("クラス図の書き方", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ学部", "同じ学部", "qid6"));
+        Lecture lecture3 = department1.getLecture("Lecture-id3");
+        lecture3.addQuestion(new Question("この授業は簡単ですか", "単位マジでやばいんで、これが楽単かどうか教えてください", "test04", new ArrayList<String>(List.of("ロボティクス","楽単")), "同じ学部", "同じ学部", "qid7"));
+        lecture3.addQuestion(new Question("このテストの持ち込みについて", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ学部", "同じ学部", "qid8"));
     }
 
     //関数は動詞名詞
