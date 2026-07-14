@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Path("/questions")
 @Component
@@ -37,7 +38,9 @@ public class QuestionResource {
             @FormParam("uid") String uid,
             @FormParam("tags") List<String> tags,
             @FormParam("view-permission") String viewPermission,
-            @FormParam("res-permission") String resPermission)
+            @FormParam("res-permission") String resPermission,
+            @FormParam("lectureId") String lectureId,
+            @FormParam("token") String token)
     {
         // 400 不正なリクエスト
         if (title == null || title.isEmpty()
@@ -45,7 +48,8 @@ public class QuestionResource {
                 || uid == null || uid.isEmpty()
                 || tags == null || tags.isEmpty()
                 || viewPermission == null || viewPermission.isEmpty()
-                || resPermission == null || resPermission.isEmpty()) {
+                || resPermission == null || resPermission.isEmpty()
+                || lectureId == null || lectureId.isEmpty()) {
 
             throw new WebApplicationException(
                     Response.status(Response.Status.BAD_REQUEST)
@@ -54,7 +58,11 @@ public class QuestionResource {
             );
         }
 
+        // 認証(uidとtokenが一致するか確認。なりすまし投稿を防ぐ)
+        authenticate(uid, token);
+
         // 201 作成成功
+        //return questionRepository.createQuestion(title, body, uid, tags, viewPermission, resPermission, lectureId);
         return questionRepository.createQuestion(title, body, uid, tags, viewPermission, resPermission);
 
 //        // 404 データが存在しない　→　ここではエラー404は必要ない
@@ -170,6 +178,44 @@ public class QuestionResource {
         // 200 成功
         return question.getUid();
     }
+//
+//
+//    // 指定した授業の質問一覧を取得
+//    @Path("/lecture/{lectureId}")
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<Question> getQuestionsByLectureId(
+//            @PathParam("lectureId") String lectureId,
+//            @QueryParam("uid") String requesterUid,
+//            @QueryParam("token") String token) {
+//
+//        // 認証
+//        User requester = authenticate(requesterUid, token);
+//
+//        // Repositoryから取得
+//        List<Question> questions =
+//                questionRepository.getQuestionsByLectureId(lectureId);
+//
+//        // 閲覧可能な質問だけを格納
+//        List<Question> result = new java.util.ArrayList<>();
+//
+//        for (Question question : questions) {
+//
+//            if (PermissionChecker.hasPermission(
+//                    question.getViewPermission(),
+//                    question.getUid(),
+//                    requester.getUid(),
+//                    userRepository)) {
+//
+//                result.add(question);
+//            }
+//        }
+//
+//        return result;
+//    }
+//
+//
+
 
     /**
      * リクエストしてきたユーザーが本人かどうかをtokenで確認する
