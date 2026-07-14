@@ -206,7 +206,7 @@ public class CategoryDepartmentResource {
                             .build());
         }
 
-        Department department =  faculty.getDepartment(departmentName);
+        Department department = faculty.getDepartment(departmentName);
 
         if (department == null) {
             throw new WebApplicationException(
@@ -215,7 +215,7 @@ public class CategoryDepartmentResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = department.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
@@ -258,7 +258,7 @@ public class CategoryDepartmentResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = department.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
