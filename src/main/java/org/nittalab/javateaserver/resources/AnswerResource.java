@@ -45,7 +45,7 @@ public class AnswerResource {
     @Path("/{qid}/answers")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Answer createAnswer(@PathParam("qid") String qid,@FormParam("uid") String uid,@FormParam("body") String body,@FormParam("token") String token){
+    public Answer createAnswer(@PathParam("qid") String qid,@FormParam("uid") String uid,@FormParam("body") String body,@FormParam("token") String token, @FormParam("name") String name){
         checkUser(uid, token);
 
         checkQuestion(qid);
@@ -57,7 +57,7 @@ public class AnswerResource {
                             .build()
             );
         }
-        Answer newAnswer = answerRepository.createAnswer(qid, body, uid);
+        Answer newAnswer = answerRepository.createAnswer(qid, body, uid, name);
         if(newAnswer == null){
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)

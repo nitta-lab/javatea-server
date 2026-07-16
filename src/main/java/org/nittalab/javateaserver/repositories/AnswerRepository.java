@@ -10,12 +10,12 @@ public class AnswerRepository {
 
     private HashMap<String, HashMap <String, Answer>> answers = new HashMap<>(); //(qid, (aid, answer))という入れ子構造
 
-    public Answer createAnswer(String qid, String body, String uid) { //解答の作成
+    public Answer createAnswer(String qid, String body, String uid, String name) { //解答の作成
         int size = answers.size() + 1;
         String aid = "aid" + size;
         HashMap<String, Answer> answer = new HashMap<>();
 
-        answer.put(aid, new Answer(aid, body, uid));
+        answer.put(aid, new Answer(aid, body, uid, name));
         answers.put(qid, answer);
 
         return answers.get(qid).get(aid);
