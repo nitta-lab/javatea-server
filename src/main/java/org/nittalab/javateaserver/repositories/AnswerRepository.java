@@ -4,6 +4,7 @@ import org.nittalab.javateaserver.models.Answer;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.Set;
 
 @Repository
 public class AnswerRepository {
@@ -23,14 +24,29 @@ public class AnswerRepository {
     }
 
     public Answer createAnswer(String qid, String body, String uid) { //解答の作成
-        int size = answers.size() + 1;
+        if(!answers.containsKey(qid)){
+            answers.put(qid, new HashMap<>());
+        }
+
+        Set<String> keyList = answers.get(qid).keySet();
+//        Set<String> keyList = answers.keySet();
+
+        int size = keyList.size() + 1;
         String aid = "aid" + size;
-        HashMap<String, Answer> answer = new HashMap<>();
 
-        answer.put(aid, new Answer(aid, body, uid));
-        answers.put(qid, answer);
+        if(!answers.get(qid).containsKey(uid)){
+            answers.get(qid).put(aid, new Answer(aid, body, uid));
+        }
 
-        return answers.get(qid).get(aid);
+        return answers.get(qid).get(uid);
+
+
+//        HashMap<String, Answer> answer = new HashMap<>();
+//
+//        answer.put(aid, new Answer(aid, body, uid));
+//        answers.put(qid, answer);
+//
+//        return answers.get(qid).get(aid);
     }
 
     public HashMap <String, Answer> getAnswers(String qid) { //質問に紐づく解答一覧を返す
