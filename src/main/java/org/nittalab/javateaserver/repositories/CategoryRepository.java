@@ -20,15 +20,15 @@ public class CategoryRepository {
         Lecture lecture1 = university1.getLecture("Lecture-id1");
         lecture1.addQuestion(new Question("オーバーライドとは", "オーバーライドって何ですか", "test04", new ArrayList<String>(List.of("オブジェクト指向")), "だれでも", "だれでも", "qid3"));
         lecture1.addQuestion(new Question("継承とは", "継承って何ですか", "test04", new ArrayList<String>(List.of("オブジェクト指向")), "同じ大学", "同じ学部", "qid4"));
-        lecture1.addQuestion(new Question("クラス図のおいしい作り方を教えてください", "継承って何ですか", "test01", new ArrayList<String>(List.of("オブジェクト指向")), "同じ学科", "同じ学部", "qid9"));
+        lecture1.addQuestion(new Question("クラス図のおいしい作り方を教えてください", "継承って何ですか", "test01", new ArrayList<String>(List.of("オブジェクト指向")), "同じ学部", "同じ学部", "qid9"));
         Lecture lecture2 = faculty1.getLecture("Lecture-id2");
         lecture2.addQuestion(new Question("クラス図の書き方", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "だれでも", "だれでも", "qid5"));
         lecture2.addQuestion(new Question("大規模アプリケーションの食べ方", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ学部", "同じ学部", "qid6"));
-        lecture2.addQuestion(new Question("おいしいプログラミング言語はありますか", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ学科", "同じ学科", "qid10"));
+        lecture2.addQuestion(new Question("おいしいプログラミング言語はありますか", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ大学", "同じ大学", "qid10"));
         Lecture lecture3 = department1.getLecture("Lecture-id3");
         lecture3.addQuestion(new Question("この授業は簡単ですか", "単位マジでやばいんで、これが楽単かどうか教えてください", "test04", new ArrayList<String>(List.of("ロボティクス","楽単")), "だれでも", "だれでも", "qid7"));
         lecture3.addQuestion(new Question("このテストの持ち込みについて", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ学部", "同じ学部", "qid8"));
-        lecture3.addQuestion(new Question("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ学科", "同じ学科", "qid11"));
+        lecture3.addQuestion(new Question("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ大学", "同じ大学", "qid11"));
     }
 
     //関数は動詞名詞
