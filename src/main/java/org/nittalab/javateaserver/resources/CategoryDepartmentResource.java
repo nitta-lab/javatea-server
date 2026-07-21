@@ -600,28 +600,26 @@ public class CategoryDepartmentResource {
                             .build());
         }
 
-        return lecture.getQuestions();
+        // 認証
+        User requester = authenticate(requesterUid, token);
 
-//        // 認証
-//        User requester = authenticate(requesterUid, token);
-//
-//        // ==================== 🛠️ ここから追加（デバッグ用ログ） ====================
-//        System.out.println("========== [DEBUG START] ==========");
-//        System.out.println("① 取得したLecture: " + lecture);
-//        System.out.println("② Lecture内の質問数: " + (lecture != null ? lecture.getQuestions().size() : 0));
-//        System.out.println("③ リクエストしたUser: " + requester);
-//        // =======================================================================
-//
-//        // 閲覧権限があるものだけに絞り込む
-//        Set<Question> visibleQuestions = new HashSet<>();
-//        for (Question question : lecture.getQuestions()) {
-//            if (PermissionChecker.hasPermission(
-//                    question.getViewPermission(), question.getUid(), requester.getUid(), userRepository)) {
-//                visibleQuestions.add(question);
-//            }
-//        }
-//
-//        return visibleQuestions;
+        // ==================== 🛠️ ここから追加（デバッグ用ログ） ====================
+        System.out.println("========== [DEBUG START] ==========");
+        System.out.println("① 取得したLecture: " + lecture);
+        System.out.println("② Lecture内の質問数: " + (lecture != null ? lecture.getQuestions().size() : 0));
+        System.out.println("③ リクエストしたUser: " + requester);
+        // =======================================================================
+
+        // 閲覧権限があるものだけに絞り込む
+        Set<Question> visibleQuestions = new HashSet<>();
+        for (Question question : lecture.getQuestions()) {
+            if (PermissionChecker.hasPermission(
+                    question.getViewPermission(), question.getUid(), requester.getUid(), userRepository)) {
+                visibleQuestions.add(question);
+            }
+        }
+
+        return visibleQuestions;
     }
 
     @Path("/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}/questions/{qid}")
