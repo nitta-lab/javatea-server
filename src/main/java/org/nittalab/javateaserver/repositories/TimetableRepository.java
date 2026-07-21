@@ -11,14 +11,14 @@ public class TimetableRepository {
     private HashMap<String, TreeMap<Integer, Timetable>> timetableMap = new HashMap<>();
     public TimetableRepository(){
         createTimetable("test01",2025);
-        addLectureId("test01",2025,"Lecture-id1",new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1"));
-        addLectureId("test01",2025,"Lecture-id2",new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2"));
-        addLectureId("test01",2025,"Lecture-id3",new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3"));
-        addLectureId("test01",2025,"Lecture-id4",new Lecture("コンパイラインタプリタ", 3, "後期", 1, "水", 5,  "Lecture-id4"));
-        addLectureId("test01",2025,"Lecture-id5",new Lecture("基礎体育学演習", 1, "通年", 2, "木", 1,"Lecture-id5"));
-        addLectureId("test01",2025,"Lecture-id6",new Lecture("AI・データサイエンス入門", 1, "その他", 1, "土", 3,  "Lecture-id6"));
+        addLectureId("test01",2025,"Lecture-id1",new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1",null,null));
+        addLectureId("test01",2025,"Lecture-id2",new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2","知能情報学部",null));
+        addLectureId("test01",2025,"Lecture-id3",new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3","知能情報学部","知能情報学科"));
+        addLectureId("test01",2025,"Lecture-id4",new Lecture("コンパイラインタプリタ", 3, "後期", 1, "水", 5,  "Lecture-id4","知能情報学部","知能情報学科"));
+        addLectureId("test01",2025,"Lecture-id5",new Lecture("基礎体育学演習", 1, "通年", 2, "木", 1,"Lecture-id5",null,null));
+        addLectureId("test01",2025,"Lecture-id6",new Lecture("AI・データサイエンス入門", 1, "その他", 1, "土", 3,  "Lecture-id6","知能情報学部","知能情報学科"));
     }
-    //ユーザのタイムテーブルを作成してTimetable
+    //ユーザのタイムテーブルを作成してTimetable,"知能情報学部","知能情報学科"
     //ユーザが存在するかどうかはuserRepositoryに丸投げ予定
     private Timetable getTimetableMap(String uid, int year) {
         if (!timetableMap.containsKey(uid)) {

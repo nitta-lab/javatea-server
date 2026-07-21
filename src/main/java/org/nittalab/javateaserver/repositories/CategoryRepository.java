@@ -12,9 +12,9 @@ public class CategoryRepository {
         University university1 = createUniversity("甲南大学", "コウナンダイガク");
         Faculty faculty1 = university1.createFaculty("知能情報学部");
         Department department1 = faculty1.createDepartment("知能情報学科");
-        university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1"));
-        faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2"));
-        department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3"));
+        university1.addLecture("Lecture-id1", new Lecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2, "Lecture-id1",null,null));
+        faculty1.addLecture("Lecture-id2", new Lecture("ソフトウェア工学", 3, "前期", 1, "火", 2, "Lecture-id2","知能情報学部",null));
+        department1.addLecture("Lecture-id3", new Lecture("ロボティクス", 3, "前期", 1, "水", 2,  "Lecture-id3","知能情報学部","知能情報学科"));
         university1.addQuestion(new Question("図書館の使い方について", "図書館の蔵書検索のパソコンの使い方を教えてください", "test01", new ArrayList<String>(List.of("甲南大学","図書館")), "だれでも", "だれでも", "qid1"));
         university1.addQuestion(new Question("食堂のおすすめメニュー", "食堂の一番美味いやつを教えろください", "test01", new ArrayList<String>(List.of("甲南大学","食堂")), "だれでも", "だれでも", "qid2"));
         Lecture lecture1 = university1.getLecture("Lecture-id1");
