@@ -5,6 +5,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 //import org.nittalab.javateaserver.models.FriendPair;
 //import org.nittalab.javateaserver.models.UserDTO;
+import org.nittalab.javateaserver.models.Question;
+import org.nittalab.javateaserver.repositories.QuestionRepository;
 import org.nittalab.javateaserver.repositories.TimetableRepository;
 import org.nittalab.javateaserver.repositories.UserRepository;
 import org.nittalab.javateaserver.models.User;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Component;
 //import java.util.ArrayList;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
@@ -42,12 +45,14 @@ public class UserResource {
 
     private final UserRepository userRepository;
     private final TimetableRepository timetableRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
-    public UserResource(UserRepository userRepository, TimetableRepository timetableRepository) {
+    public UserResource(UserRepository userRepository, TimetableRepository timetableRepository,  QuestionRepository questionRepository) {
         //インスタンスを作るときに呼び出されるメソッドであるコンストラクタを書く
         this.userRepository = userRepository;
         this.timetableRepository = timetableRepository;
+        this.questionRepository = questionRepository;
     }
 
     //@Path("/{uid}/..")などパスを指定する
@@ -495,4 +500,133 @@ public class UserResource {
         // 200 自分のニックネームを返す
         return user.getName();
     }
+
+    //アカウントのユーザが質問したQuestion一覧の取得
+    @GET
+    @Path("/{uid}/questions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getQuestions(@PathParam("uid") String uid, @QueryParam("token") String token) {
+
+        //取得
+        User user = userRepository.getUser(uid);
+        //存在チェック
+        if (user == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
+            );
+        }
+
+        // 401 認証エラー
+        if (token == null || !token.equals(user.getToken())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.FORBIDDEN)
+                            .entity("認証失敗")
+                            .build()
+            );
+        }
+
+        return user.getQuestions();
+    }
+
+//    //アカウントのユーザが質問したQuestionを追加
+//    @PUT
+//    @Path("/{uid}/questions")
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    public void addQuestion(@PathParam("uid") String uid, @FormParam("qid") String qid, @FormParam("token") String token) {
+//
+//        //取得
+//        User user = userRepository.getUser(uid);
+//        //存在チェック
+//        if (user == null) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.NOT_FOUND)
+//                            .entity("ユーザが存在しません")
+//                            .build()
+//            );
+//        }
+//
+//        Question question =  questionRepository.getQuestion(qid);
+//        if (question == null) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.NOT_FOUND)
+//                            .entity("質問が存在しません")
+//                            .build()
+//            );
+//        }
+//
+//        // 401 認証エラー
+//        if (token == null || !token.equals(user.getToken())) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.FORBIDDEN)
+//                            .entity("認証失敗")
+//                            .build()
+//            );
+//        }
+//
+//        Set<Question> questions = user.getQuestions();
+//        questions.add(question);
+//        user.setQuestions(questions);
+//    }
+
+    //アカウントのユーザがベストアンサーに選ばれたQuestion一覧の取得
+    @GET
+    @Path("/{uid}/best-answers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getBestAnswers(@PathParam("uid") String uid, @QueryParam("token") String token) {
+
+        //取得
+        User user = userRepository.getUser(uid);
+        //存在チェック
+        if (user == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
+            );
+        }
+
+        // 401 認証エラー
+        if (token == null || !token.equals(user.getToken())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.FORBIDDEN)
+                            .entity("認証失敗")
+                            .build()
+            );
+        }
+
+        return user.getBestAnswers();
+    }
+
+//    //アカウントのユーザがベストアンサーに選ばれたquestionを追加
+//    @PUT
+//    @Path("/{uid}/best-answers")
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    public void addBestAnswers(@PathParam("uid") String uid, @FormParam("qid") String qid) {
+//
+//        //取得
+//        User user = userRepository.getUser(uid);
+//        //存在チェック
+//        if (user == null) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.NOT_FOUND)
+//                            .entity("ユーザが存在しません")
+//                            .build()
+//            );
+//        }
+//
+//        Question question =  questionRepository.getQuestion(qid);
+//        if (question == null) {
+//            throw new WebApplicationException(
+//                    Response.status(Response.Status.NOT_FOUND)
+//                            .entity("質問が存在しません")
+//                            .build()
+//            );
+//        }
+//
+//        Set<Question> questions = user.getBestAnswers();
+//        questions.add(question);
+//        user.setBestAnswers(questions);
+//    }
 }

@@ -1,6 +1,8 @@
 package org.nittalab.javateaserver.resources;
 
+import org.nittalab.javateaserver.models.Answer;
 import org.nittalab.javateaserver.models.User;
+import org.nittalab.javateaserver.repositories.AnswerRepository;
 import org.nittalab.javateaserver.repositories.UserRepository;
 import org.nittalab.javateaserver.util.PermissionChecker;
 import org.nittalab.javateaserver.models.Question;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Path("/questions")
 @Component
@@ -21,11 +24,13 @@ public class QuestionResource {
 
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QuestionResource(QuestionRepository questionRepository, UserRepository userRepository) {
+    public QuestionResource(QuestionRepository questionRepository, UserRepository userRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.answerRepository = answerRepository;
     }
 
     //質問を新しく作成する
@@ -63,7 +68,22 @@ public class QuestionResource {
 
         // 201 作成成功
         //return questionRepository.createQuestion(title, body, uid, tags, viewPermission, resPermission, lectureId);
-        return questionRepository.createQuestion(title, body, uid, tags, viewPermission, resPermission);
+        Question question = questionRepository.createQuestion(title, body, uid, tags, viewPermission, resPermission);
+
+        // 質問したユーザの質問一覧に追加
+        User user = userRepository.getUser(uid);
+        if(user == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません。")
+                            .build()
+            );
+        }
+        Set<Question> questions = user.getQuestions();
+        questions.add(question);
+        user.setQuestions(questions);
+
+        return question.getQid();
 
 //        // 404 データが存在しない　→　ここではエラー404は必要ない
 //        // 500 予期せぬエラー　→　ここではエラー500は必要ない
@@ -178,6 +198,48 @@ public class QuestionResource {
         // 200 成功
         return question.getUid();
     }
+
+    // ベストアンサーを記録
+    @Path("/{qid}/best-answer")
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
+    public void setBestAnswer(@PathParam("qid") String qid, @FormParam("aid") String aid) {
+
+        Question question = questionRepository.getQuestion(qid);
+        if(question == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("質問が存在しません。")
+                            .build()
+            );
+        }
+
+        Answer answer = answerRepository.getAnswer(qid, aid);
+        if(answer == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("回答が存在しません。")
+                            .build()
+            );
+        }
+
+        // ベストアンサーのaidを記録
+        question.setBestAnswerAid(aid);
+
+        // 回答したユーザのベストアンサーに選ばれた質問一覧に追加
+        User user = userRepository.getUser(answer.getUid());
+        if(user == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません。")
+                            .build()
+            );
+        }
+        Set<Question> questions = user.getBestAnswers();
+        questions.add(question);
+        user.setBestAnswers(questions);
+    }
+
 //
 //
 //    // 指定した授業の質問一覧を取得

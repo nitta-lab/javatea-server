@@ -29,12 +29,13 @@ public class QuestionRepository {
     }
 
     //質問の追加
-    public String createQuestion(String title, String body, String uid, List<String> tags, String viewPermission, String resPermission) {
+    public Question createQuestion(String title, String body, String uid, List<String> tags, String viewPermission, String resPermission) {
         Set<String> keyList = questionMap.keySet();
         int num = keyList.size() + 1;
         String qid = "qid" + num;
-        questionMap.put(qid, new Question(title, body, uid, tags, viewPermission, resPermission, qid));
-        return qid;
+        Question question = new Question(title, body, uid, tags, viewPermission, resPermission, qid);
+        questionMap.put(qid, question);
+        return question;
     }
 
     public Question getQuestion(String qid) {
