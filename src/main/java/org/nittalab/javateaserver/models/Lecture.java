@@ -14,7 +14,10 @@ public class Lecture {
     private String lectureId;
     private Set<Question> questions;
 
-    public Lecture(String name, int grade, String semester, int frame, String day, int period, String lectureId) {
+    private String facultyName;
+    private String departmentName;
+
+    public Lecture(String name, int grade, String semester, int frame, String day, int period, String lectureId, String facultyName, String departmentName) {
         this.name = name;
         this.grade = grade;
         this.semester = semester;
@@ -23,6 +26,8 @@ public class Lecture {
         this.period = period;
         this.lectureId = lectureId;
         this.questions = new HashSet<>();
+        this.facultyName = facultyName;
+        this.departmentName = departmentName;
     }
 
     public String getName() {
@@ -84,4 +89,20 @@ public class Lecture {
     public Set<Question> getQuestions() {return questions;}
 
     public void addQuestion(Question question) {questions.add(question);}
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+    }
+
+    public  String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 }

@@ -16,19 +16,19 @@ public class LectureRepository {
     private HashMap<String, Lecture> lectureMap = new HashMap<>();
     // test用(起動時にユーザ登録)
     public LectureRepository(){
-        createLecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2);
-        createLecture("ソフトウェア工学", 3, "前期", 1, "火", 2);
-        createLecture("ロボティクス", 3, "前期", 1, "水", 2);
-        createLecture("コンパイラインタプリタ", 3, "後期", 1, "水", 5);
-        createLecture("基礎体育学演習", 1, "通年", 2, "木", 1);
-        createLecture("AI・データサイエンス入門", 1, "その他", 1, "土", 3);
+        createLecture("オブジェクト指向プログラミング", 3, "前期", 1, "月", 2,null,null);
+        createLecture("ソフトウェア工学", 3, "前期", 1, "火", 2,"知能情報学部",null);
+        createLecture("ロボティクス", 3, "前期", 1, "水", 2,"知能情報学部","知能情報学科");
+        createLecture("コンパイラインタプリタ", 3, "後期", 1, "水", 5,"知能情報学部","知能情報学科");
+        createLecture("基礎体育学演習", 1, "通年", 2, "木", 1,null,null);
+        createLecture("AI・データサイエンス入門", 1, "その他", 1, "土", 3,"知能情報学部","知能情報学科");
     }
     //授業の追加
-    public String createLecture(String name, int grade, String semester, int frame, String day, int period) {
+    public String createLecture(String name, int grade, String semester, int frame, String day, int period,String facultyName, String departmentName) {
         Set<String> keyList = lectureMap.keySet();
         int num = keyList.size() + 1;
         String lectureId = "Lecture-id" + num;
-        lectureMap.put(lectureId, new Lecture(name, grade, semester, frame, day, period, lectureId));
+        lectureMap.put(lectureId, new Lecture(name, grade, semester, frame, day, period, lectureId,facultyName, departmentName ));
         return lectureId;
     }
 

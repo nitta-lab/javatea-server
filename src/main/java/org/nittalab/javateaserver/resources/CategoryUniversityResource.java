@@ -337,10 +337,7 @@ import org.nittalab.javateaserver.util.PermissionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
@@ -658,6 +655,96 @@ public class CategoryUniversityResource {
         }
         lecture.addQuestion(question);
         university.addAllQuestion(question);
+    }
+
+    @GET
+    @Path("/{univ-id}/questions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getUniversityQuestions(
+            @PathParam("univ-id") String univId,
+            @QueryParam("uid") String requesterUid,
+            @QueryParam("token") String token) {
+
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+
+
+        // 認証
+        User requester = authenticate(requesterUid, token);
+
+        // 閲覧権限があるものだけに絞り込む
+        Set<Question> visibleQuestions = new HashSet<>();
+        for (Question question : university.getAllQuestions()) {
+            if (PermissionChecker.hasPermission(
+                    question.getViewPermission(), question.getUid(), requester.getUid(), userRepository)) {
+                visibleQuestions.add(question);
+            }
+        }
+
+        return visibleQuestions;
+    }
+
+    @GET
+    @Path("/{univ-id}/keyWords/questions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<Question> getUniversityKeyWordsQuestions(
+            @PathParam("univ-id") String univId,
+            @QueryParam("uid") String requesterUid,
+            @QueryParam("token") String token,
+            @QueryParam("keyWords") List<String> keyWords
+    ) {
+
+        University university = categoryRepository.getUniversity(univId);
+
+        if (university == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("指定された大学IDが存在しません")
+                            .build());
+        }
+
+
+
+        // 認証
+        User requester = authenticate(requesterUid, token);
+
+        // 閲覧権限があるものだけに絞り込む
+        Set<Question> visibleQuestions = new HashSet<>();
+        for (Question question : university.getAllQuestions()) {
+            if (PermissionChecker.hasPermission(
+                    question.getViewPermission(), question.getUid(), requester.getUid(), userRepository)) {
+                visibleQuestions.add(question);
+            }
+        }
+
+        // タグで絞り込み
+        Set<Question> visibleKeyWordsQuestions = new HashSet<>();
+        for (Question question : visibleQuestions) {
+            List<String> tags = question.getTags();
+            for (String keyWord :  keyWords) {
+                if(keyWord.isEmpty()) {
+                    continue;
+                }
+                if(keyWord.contains(" ") || keyWord.contains("\t") || keyWord.contains("\n") || keyWord.contains("　")) {
+                    continue;
+                }
+                if (tags.contains(keyWord)) {
+                    visibleKeyWordsQuestions.add(question);
+                }
+                if (question.getTitle().contains(keyWord)) {
+                    visibleKeyWordsQuestions.add(question);
+                }
+            }
+        }
+
+        return visibleKeyWordsQuestions;
     }
 
     /**

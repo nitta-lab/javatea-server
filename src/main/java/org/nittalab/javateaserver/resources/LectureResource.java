@@ -31,7 +31,9 @@ public class LectureResource {
             @FormParam("semester") String semester,
             @FormParam("frame") Integer frame,
             @FormParam("day") String day,
-            @FormParam("period") Integer period)
+            @FormParam("period") Integer period,
+            @FormParam("facultyName") String facultyName,
+            @FormParam("departmentName") String departmentName)
     {
         // 400 不正なリクエスト
         if (name == null || name.isEmpty()
@@ -49,7 +51,7 @@ public class LectureResource {
         }
 
         // 201 作成成功
-        return lectureRepository.createLecture(name, grade, semester, frame, day, period);
+        return lectureRepository.createLecture(name, grade, semester, frame, day, period,facultyName, departmentName);
 
 //        // 404 データが存在しない　→　ここではエラー404は必要ない
 //        // 500 予期せぬエラー　→　ここではエラー500は必要ない
