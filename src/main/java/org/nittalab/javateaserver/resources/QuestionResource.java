@@ -203,7 +203,7 @@ public class QuestionResource {
     @Path("/{qid}/best-answer")
     @PUT
     @Produces(MediaType.TEXT_PLAIN)
-    public void setBestAnswer(@PathParam("qid") String qid, @FormParam("aid") String aid) {
+    public Question setBestAnswer(@PathParam("qid") String qid, @FormParam("aid") String aid) {
 
         Question question = questionRepository.getQuestion(qid);
         if(question == null) {
@@ -238,6 +238,8 @@ public class QuestionResource {
         Set<Question> questions = user.getBestAnswers();
         questions.add(question);
         user.setBestAnswers(questions);
+
+        return question;
     }
 
 //
