@@ -29,6 +29,10 @@ public class CategoryRepository {
         lecture3.addQuestion(new Question("この授業は簡単ですか", "単位マジでやばいんで、これが楽単かどうか教えてください", "test04", new ArrayList<String>(List.of("ロボティクス","楽単")), "だれでも", "だれでも", "qid7"));
         lecture3.addQuestion(new Question("このテストの持ち込みについて", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ学部", "同じ学部", "qid8"));
         lecture3.addQuestion(new Question("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ大学", "同じ大学", "qid11"));
+
+
+        // 検索用
+        university1.addAllQuestion(new Question("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ大学", "同じ大学", "qid11"));
     }
 
     //関数は動詞名詞
