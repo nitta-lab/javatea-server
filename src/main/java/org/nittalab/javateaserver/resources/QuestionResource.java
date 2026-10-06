@@ -202,7 +202,7 @@ public class QuestionResource {
     // ベストアンサーを記録
     @Path("/{qid}/best-answer")
     @PUT
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Question setBestAnswer(@PathParam("qid") String qid, @FormParam("aid") String aid) {
 
         Question question = questionRepository.getQuestion(qid);
