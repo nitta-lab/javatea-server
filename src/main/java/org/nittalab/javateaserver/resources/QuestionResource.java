@@ -203,6 +203,7 @@ public class QuestionResource {
     @Path("/{qid}/best-answer")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Question setBestAnswer(@PathParam("qid") String qid, @FormParam("aid") String aid) {
 
         Question question = questionRepository.getQuestion(qid);
