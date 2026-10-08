@@ -34,11 +34,11 @@ public class AnswerRepository {
         int size = keyList.size() + 1;
         String aid = "aid" + size;
 
-        if(!answers.get(qid).containsKey(uid)){
+        if(!answers.get(qid).containsKey(aid)){
             answers.get(qid).put(aid, new Answer(aid, body, uid, name));
         }
 
-        return answers.get(qid).get(uid);
+        return answers.get(qid).get(aid);
     }
 
     public HashMap <String, Answer> getAnswers(String qid) { //質問に紐づく解答一覧を返す
