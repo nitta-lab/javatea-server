@@ -38,7 +38,7 @@ public class AnswerRepository {
             answers.get(qid).put(aid, new Answer(aid, body, uid, name));
         }
 
-        return answers.get(qid).get(uid);
+        return answers.get(qid).get(aid);
     }
 
     public HashMap <String, Answer> getAnswers(String qid) { //質問に紐づく解答一覧を返す
