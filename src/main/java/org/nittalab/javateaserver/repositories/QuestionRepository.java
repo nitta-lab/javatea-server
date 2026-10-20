@@ -26,6 +26,7 @@ public class QuestionRepository {
         createQuestion("クラス図のおいしい作り方を教えてください", "継承って何ですか", "test01", new ArrayList<String>(List.of("オブジェクト指向")), "同じ学部", "同じ学部"); // qid9
         createQuestion("おいしいプログラミング言語はありますか", "クラス図ってどうやって書けばいいんでしょうか。むずかちい", "test04", new ArrayList<String>(List.of("ソフトウェア工学","楽単")), "同じ大学", "同じ大学"); // qid10
         createQuestion("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ大学", "同じ大学"); // qid11
+        createQuestion("コンビニどこですか？", "東京付近でコンビニ探してます。早めに教えて―――（ちいかわ風)", "test04", new ArrayList<String>(List.of("コンビニ", "ちいかわ")), "だれでも", "だれでも");//qid12
     }
 
     //質問の追加

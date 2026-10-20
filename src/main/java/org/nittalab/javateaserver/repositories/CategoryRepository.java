@@ -33,6 +33,7 @@ public class CategoryRepository {
 
         // 検索用
         university1.addAllQuestion(new Question("ロボットを壊すとどうなるの", "この授業って持ち込みありですか", "test04", new ArrayList<String>(List.of("ロボティクス","テスト")), "同じ大学", "同じ大学", "qid11"));
+        addGeneralQuestion(new Question("コンビニどこですか？", "東京付近でコンビニ探してます。早めに教えて―――（ちいかわ風)", "test04", new ArrayList<String>(List.of("コンビニ", "ちいかわ")), "だれでも", "だれでも", "qid12"));
     }
 
     //関数は動詞名詞
