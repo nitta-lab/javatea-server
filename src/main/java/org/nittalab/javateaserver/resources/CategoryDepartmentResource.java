@@ -653,7 +653,7 @@ public class CategoryDepartmentResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = department.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
