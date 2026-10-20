@@ -51,7 +51,7 @@ public class QuestionResource {
         if (title == null || title.isEmpty()
                 || body == null || body.isEmpty()
                 || uid == null || uid.isEmpty()
-                || tags == null || tags.isEmpty()
+                || tags == null
                 || viewPermission == null || viewPermission.isEmpty()
                 || resPermission == null || resPermission.isEmpty()
                 || lectureId == null || lectureId.isEmpty()) {
