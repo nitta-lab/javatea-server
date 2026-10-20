@@ -31,6 +31,9 @@ public class UserRepository {
         user04.setToken("testToken04");
         user04.setUniversity("univ-id1");
         user04.setFaculty("知能情報学部");
+        user04.addCountAnswer();
+        user04.addCountAnswer();
+        user04.addCountAnswer();
     }
 
     //Userクラスの作成
@@ -59,5 +62,13 @@ public class UserRepository {
     //Tokenの削除
     public void deleteToken(String uid){
         userMap.get(uid).setToken(null);
+    }
+
+    public void addCountAnswer(String uid) {
+        userMap.get(uid).addCountAnswer();
+    }
+
+    public int getCountAnswer(String uid) {
+        return userMap.get(uid).getCountAnswer();
     }
 }

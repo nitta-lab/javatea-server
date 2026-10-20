@@ -599,6 +599,33 @@ public class UserResource {
         return user.getBestAnswers();
     }
 
+    @GET
+    @Path("/{uid}/countAnswer")
+    @Produces(MediaType.TEXT_PLAIN)
+    public int getCountAnswer(@PathParam("uid") String uid, @QueryParam("token") String token) {
+        //取得
+        User user = userRepository.getUser(uid);
+        //存在チェック
+        if (user == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity("ユーザが存在しません")
+                            .build()
+            );
+        }
+
+        // 401 認証エラー
+        if (token == null || !token.equals(user.getToken())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.FORBIDDEN)
+                            .entity("認証失敗")
+                            .build()
+            );
+        }
+
+        return user.getCountAnswer();
+    }
+
 //    //アカウントのユーザがベストアンサーに選ばれたquestionを追加
 //    @PUT
 //    @Path("/{uid}/best-answers")

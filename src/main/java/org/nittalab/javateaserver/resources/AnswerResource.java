@@ -57,6 +57,7 @@ public class AnswerResource {
                             .build()
             );
         }
+
         Answer newAnswer = answerRepository.createAnswer(qid, body, uid, name);
         if(newAnswer == null){
             throw new WebApplicationException(
@@ -66,6 +67,7 @@ public class AnswerResource {
             );
         }
 
+        userRepository.addCountAnswer(uid);
         return newAnswer;
     }
 
