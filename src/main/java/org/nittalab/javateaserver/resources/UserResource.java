@@ -602,7 +602,7 @@ public class UserResource {
     @GET
     @Path("/{uid}/countAnswer")
     @Produces(MediaType.TEXT_PLAIN)
-    public int getCountAnswer(@PathParam("uid") String uid, @QueryParam("token") String token) {
+    public Integer getCountAnswer(@PathParam("uid") String uid, @QueryParam("token") String token) {
         //取得
         User user = userRepository.getUser(uid);
         //存在チェック
