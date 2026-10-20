@@ -57,12 +57,12 @@ public class User {
         this.pw = pw;
     }
 
-    //所属大学名の取得
+    //所属大学IDの取得
     public String getUniversity(){
         return this.university;
     }
 
-    //所属大学名の代入
+    //所属大学IDの代入
     public void setUniversity(String university){
         this.university = university;
     }
