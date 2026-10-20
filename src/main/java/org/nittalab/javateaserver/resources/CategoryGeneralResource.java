@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Path("categories/general/questions")
+@Path("categories/general")
 @Component
 public class CategoryGeneralResource {
 
@@ -32,6 +32,7 @@ public class CategoryGeneralResource {
         this.userRepository = userRepository;
     }
 
+    @Path("/questions")
     // 【全般】の質問を取得
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,7 +53,7 @@ public class CategoryGeneralResource {
     }
 
     // 【全般】の質問追加
-    @Path("/{qid}")
+    @Path("/questions/{qid}")
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addGeneralQuestion(@PathParam("qid") String qid) {
@@ -66,7 +67,7 @@ public class CategoryGeneralResource {
         categoryRepository.addGeneralQuestion(question);
     }
 
-    @Path("categories/general/keyWords/questions")
+    @Path("/keyWords/questions")
 
     // 【全般】の質問を取得
     @GET
