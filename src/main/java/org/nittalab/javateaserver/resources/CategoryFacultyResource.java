@@ -470,7 +470,7 @@ public class CategoryFacultyResource {
                             .build());
         }
 
-        Lecture lecture = lectureRepository.getLecture(lectureId);
+        Lecture lecture = faculty.getLecture(lectureId);
 
         if (lecture == null) {
             throw new WebApplicationException(
